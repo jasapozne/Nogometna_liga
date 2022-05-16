@@ -20,5 +20,5 @@ def uvozi_ekipa():
         f.write("INSERT INTO {tabela} {stolpci} VALUES {vrednosti} \n".format(tabela="ekipa", stolpci=stolpci, vrednosti=vrednosti))
     f.close()
 
-
+uvozi_ekipa()
          
