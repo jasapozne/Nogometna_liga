@@ -24,11 +24,7 @@ CREATE TABLE igralec (
 );
 
 CREATE TABLE zaposlen (
-<<<<<<< HEAD
-    emso INTEGER REFERENCES osebe(emso),
-=======
-    emso INTEGER oseba(emso),
->>>>>>> 69862e1a042916631f256d9371739b7aea637422
+    emso INTEGER NOT NULL REFERENCES osebe(emso),
     delovno_mesto TEXT NOT NULL,
     placa INTEGER NOT NULL
 );
@@ -40,15 +36,9 @@ CREATE TABLE ekipa (
 );
 
 CREATE TABLE goli (
-<<<<<<< HEAD
     id_tekme INTEGER REFERENCES tekma(id_tekme),
     strelec INTEGER NOT NULL REFERENCES osebe(emso), 
     podajalec INTEGER NOT NULL REFERENCES osebe(emso) 
-=======
-    id_tekme INTEGER PRIMARY KEY REFERENCES tekma(id_tekme),
-    strelec INTEGER NOT NULL REFERENCES oseba(emso), 
-    podajalec INTEGER NOT NULL REFERENCES oseba(emso) 
->>>>>>> 69862e1a042916631f256d9371739b7aea637422
 );
 
 CREATE TABLE tekma (
