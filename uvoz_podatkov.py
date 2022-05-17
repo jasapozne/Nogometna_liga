@@ -7,8 +7,9 @@ from auth_public import *
 
 
 
-#psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
-#conn = psycopg2.connect(database=d, host=host, user=user, password=password)
+psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
+conn = psycopg2.connect(database=db, host=host, user=user, password=password)
+cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
 
 def uvozi_ekipa():
@@ -20,7 +21,7 @@ def uvozi_ekipa():
         f.write("INSERT INTO {tabela} {stolpci} VALUES {vrednosti} \n".format(tabela="ekipa", stolpci=stolpci, vrednosti=vrednosti))
     f.close()
 
-uvozi_ekipa()
+#uvozi_ekipa()
          
 def uvozi_goli():
     data = pd.read_csv("podatki/csv/goli.csv")
@@ -33,7 +34,7 @@ def uvozi_goli():
 
 
 
-uvozi_goli()
+#uvozi_goli()
 
 def uvozi_igralec():
     data = pd.read_csv("podatki/csv/igralec.csv")
@@ -44,7 +45,7 @@ def uvozi_igralec():
         f.write("INSERT INTO {tabela} {stolpci} VALUES {vrednosti} \n".format(tabela="igralec", stolpci=stolpci, vrednosti=vrednosti))
     f.close()
 
-uvozi_igralec()
+#uvozi_igralec()
 
 def uvozi_oseba():
     data = pd.read_csv("podatki/csv/oseba.csv")
@@ -55,7 +56,7 @@ def uvozi_oseba():
         f.write("INSERT INTO {tabela} {stolpci} VALUES {vrednosti} \n".format(tabela="oseba", stolpci=stolpci, vrednosti=vrednosti))
     f.close()
 
-uvozi_oseba() 
+#uvozi_oseba() 
 
 def uvozi_tekma():
     data = pd.read_csv("podatki/csv/tekma.csv")
@@ -66,7 +67,7 @@ def uvozi_tekma():
         f.write("INSERT INTO {tabela} {stolpci} VALUES {vrednosti} \n".format(tabela="tekma", stolpci=stolpci, vrednosti=vrednosti))
     f.close()
 
-uvozi_tekma()
+#uvozi_tekma()
 
 def uvozi_zaposlen():
     data = pd.read_csv("podatki/csv/zaposlen.csv")
@@ -77,4 +78,20 @@ def uvozi_zaposlen():
         f.write("INSERT INTO {tabela} {stolpci} VALUES {vrednosti} \n".format(tabela="zaposlen", stolpci=stolpci, vrednosti=vrednosti))
     f.close()
 
-uvozi_zaposlen()
+#uvozi_zaposlen()
+
+def ustvari_tabele():
+    with open("klub.sql") as f:
+        koda = f.read()
+        cur.execute(koda)
+    conn.commit()
+
+def uvoziSQL():
+    for datoteka in os.listdir("podatki/sql"):
+        with open("podatki/sql/{0}".format(datoteka)) as f:
+            koda = f.read()
+            cur.execute(koda)
+        conn.commit()
+
+ustvari_tabele()
+uvoziSQL()

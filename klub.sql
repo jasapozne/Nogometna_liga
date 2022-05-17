@@ -20,11 +20,11 @@ CREATE TABLE igralec (
     vrednost INTEGER NOT NULL,
     datum_zacetka DATE NOT NULL DEFAULT now(),
     datum_konca DATE NOT NULL DEFAULT now(),
-    emso INTEGER NOT NULL REFERENCES osebe(emso) 
+    emso INTEGER NOT NULL REFERENCES oseba(emso) 
 );
 
 CREATE TABLE zaposlen (
-    emso INTEGER osebe(emso),
+    emso INTEGER oseba(emso),
     delovno_mesto TEXT NOT NULL,
     placa INTEGER NOT NULL
 );
@@ -37,8 +37,8 @@ CREATE TABLE ekipa (
 
 CREATE TABLE goli (
     id_tekme INTEGER PRIMARY KEY REFERENCES tekma(id_tekme),
-    strelec INTEGER NOT NULL REFERENCES osebe(emso), 
-    podajalec INTEGER NOT NULL REFERENCES osebe(emso) 
+    strelec INTEGER NOT NULL REFERENCES oseba(emso), 
+    podajalec INTEGER NOT NULL REFERENCES oseba(emso) 
 );
 
 CREATE TABLE tekma (
