@@ -10,7 +10,7 @@ CREATE TABLE oseba (
     ime TEXT NOT NULL,
     priimek TEXT NOT NULL,
     rojstvo DATE NOT NULL DEFAULT now(),
-    ekipa TEXT NOT NULL
+    ekipa TEXT NOT NULL REFERENCES ekipa(ime)
 );
 
 CREATE TABLE igralec (
@@ -42,9 +42,9 @@ CREATE TABLE goli (
 );
 
 CREATE TABLE tekma (
-    id_tekme INTEGER PRIMARY KEY
-    domaca_eikpa TEXT NOT NULL,
-    tuja_ekipa TEXT NOT NULL,
+    id_tekme INTEGER PRIMARY KEY,
+    domaca_ekipa TEXT NOT NULL REFERENCES ekipa(ime),
+    tuja_ekipa TEXT NOT NULL REFERENCES ekipa(ime),
     goli_domace INTEGER NOT NULL,
     goli_tuje INTEGER NOT NULL
 );
