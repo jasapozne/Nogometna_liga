@@ -1,4 +1,4 @@
-db = "nogometni_klub"
+db = "sem2022_jasap"
 st = "baza.fmf.uni-lj.si"
-user = "uporabnik"
-password = "geslo"
+user = "javnost"
+password = "javnogeslo"
