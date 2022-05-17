@@ -24,7 +24,7 @@ CREATE TABLE igralec (
 );
 
 CREATE TABLE zaposlen (
-    emso INTEGER osebe(emso),
+    emso INTEGER REFERENCES osebe(emso),
     delovno_mesto TEXT NOT NULL,
     placa INTEGER NOT NULL
 );
@@ -36,7 +36,7 @@ CREATE TABLE ekipa (
 );
 
 CREATE TABLE goli (
-    id_tekme INTEGER PRIMARY KEY REFERENCES tekma(id_tekme),
+    id_tekme INTEGER REFERENCES tekma(id_tekme),
     strelec INTEGER NOT NULL REFERENCES osebe(emso), 
     podajalec INTEGER NOT NULL REFERENCES osebe(emso) 
 );
