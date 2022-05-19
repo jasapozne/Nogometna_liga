@@ -22,19 +22,17 @@ def uvozi_ekipa():
     f.close()
 
 uvozi_ekipa()
-         
-def uvozi_goli():
-    data = pd.read_csv("podatki/csv/goli.csv")
-    f = open("podatki/sql/goli.sql", "w")
+
+def uvozi_oseba():
+    data = pd.read_csv("podatki/csv/oseba.csv")
+    f = open("podatki/sql/oseba.sql", "w")
     for i in range(len(data.index)):
         stolpci = "(" + ", ".join(str(v) for v in list(data.columns)) + ")"
-        vrednosti = "(" + ", ".join(str(v) for v in data.iloc[[i]].values.tolist()[0]) + ")"
-        f.write("INSERT INTO {tabela} {stolpci} VALUES {vrednosti}; \n".format(tabela="goli", stolpci=stolpci, vrednosti=vrednosti))
+        vrednosti = "(" + str(data.iloc[i, 0]) + ", '" + "', '".join(str(v) for v in data.iloc[i, 1:].values.tolist()) + "')"
+        f.write("INSERT INTO {tabela} {stolpci} VALUES {vrednosti}; \n".format(tabela="oseba", stolpci=stolpci, vrednosti=vrednosti))
     f.close()
 
-
-
-uvozi_goli()
+uvozi_oseba()
 
 def uvozi_igralec():
     data = pd.read_csv("podatki/csv/igralec.csv")
@@ -47,16 +45,16 @@ def uvozi_igralec():
 
 uvozi_igralec()
 
-def uvozi_oseba():
-    data = pd.read_csv("podatki/csv/oseba.csv")
-    f = open("podatki/sql/oseba.sql", "w")
+def uvozi_zaposlen():
+    data = pd.read_csv("podatki/csv/zaposlen.csv")
+    f = open("podatki/sql/zaposlen.sql", "w")
     for i in range(len(data.index)):
         stolpci = "(" + ", ".join(str(v) for v in list(data.columns)) + ")"
-        vrednosti = "(" + str(data.iloc[i, 0]) + ", '" + "', '".join(str(v) for v in data.iloc[i, 1:].values.tolist()) + "')"
-        f.write("INSERT INTO {tabela} {stolpci} VALUES {vrednosti}; \n".format(tabela="oseba", stolpci=stolpci, vrednosti=vrednosti))
+        vrednosti = "('" + "', '".join(str(v) for v in data.iloc[i, 0:2].values.tolist()) + "', " + "{0}".format(data.iloc[i, 2]) + ")"
+        f.write("INSERT INTO {tabela} {stolpci} VALUES {vrednosti}; \n".format(tabela="zaposlen", stolpci=stolpci, vrednosti=vrednosti))
     f.close()
 
-uvozi_oseba() 
+uvozi_zaposlen()
 
 def uvozi_tekma():
     data = pd.read_csv("podatki/csv/tekma.csv")
@@ -68,17 +66,25 @@ def uvozi_tekma():
     f.close()
 
 uvozi_tekma()
-
-def uvozi_zaposlen():
-    data = pd.read_csv("podatki/csv/zaposlen.csv")
-    f = open("podatki/sql/zaposlen.sql", "w")
+         
+def uvozi_goli():
+    data = pd.read_csv("podatki/csv/goli.csv")
+    f = open("podatki/sql/goli.sql", "w")
     for i in range(len(data.index)):
         stolpci = "(" + ", ".join(str(v) for v in list(data.columns)) + ")"
-        vrednosti = "('" + "', '".join(str(v) for v in data.iloc[i, 0:2].values.tolist()) + "', " + "{0}".format(data.iloc[i, 2]) + ")"
-        f.write("INSERT INTO {tabela} {stolpci} VALUES {vrednosti}; \n".format(tabela="zaposlen", stolpci=stolpci, vrednosti=vrednosti))
+        vrednosti = "(" + ", ".join(str(v) for v in data.iloc[[i]].values.tolist()[0]) + ")"
+        f.write("INSERT INTO {tabela} {stolpci} VALUES {vrednosti}; \n".format(tabela="goli", stolpci=stolpci, vrednosti=vrednosti))
     f.close()
 
-uvozi_zaposlen()
+uvozi_goli()
+
+
+
+ 
+
+
+
+
 
 def ustvari_tabele():
     with open("klub.sql") as f:
