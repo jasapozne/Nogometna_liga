@@ -3,7 +3,7 @@ import csv
 import pandas as pd
 import os
 
-from auth_public import *
+from auth import *
 
 
 
@@ -18,10 +18,10 @@ def uvozi_ekipa():
     for i in range(len(data.index)):
         stolpci = "(" + ", ".join(str(v) for v in list(data.columns)) + ")"
         vrednosti = "('" + "', '".join(str(v) for v in data.iloc[[i]].values.tolist()[0]) + "')"
-        f.write("INSERT INTO {tabela} {stolpci} VALUES {vrednosti} \n".format(tabela="ekipa", stolpci=stolpci, vrednosti=vrednosti))
+        f.write("INSERT INTO {tabela} {stolpci} VALUES {vrednosti}; \n".format(tabela="ekipa", stolpci=stolpci, vrednosti=vrednosti))
     f.close()
 
-#uvozi_ekipa()
+uvozi_ekipa()
          
 def uvozi_goli():
     data = pd.read_csv("podatki/csv/goli.csv")
@@ -29,12 +29,12 @@ def uvozi_goli():
     for i in range(len(data.index)):
         stolpci = "(" + ", ".join(str(v) for v in list(data.columns)) + ")"
         vrednosti = "(" + ", ".join(str(v) for v in data.iloc[[i]].values.tolist()[0]) + ")"
-        f.write("INSERT INTO {tabela} {stolpci} VALUES {vrednosti} \n".format(tabela="goli", stolpci=stolpci, vrednosti=vrednosti))
+        f.write("INSERT INTO {tabela} {stolpci} VALUES {vrednosti}; \n".format(tabela="goli", stolpci=stolpci, vrednosti=vrednosti))
     f.close()
 
 
 
-#uvozi_goli()
+uvozi_goli()
 
 def uvozi_igralec():
     data = pd.read_csv("podatki/csv/igralec.csv")
@@ -42,10 +42,10 @@ def uvozi_igralec():
     for i in range(len(data.index)):
         stolpci = "(" + ", ".join(str(v) for v in list(data.columns)) + ")"
         vrednosti = "('" + "', '".join(str(v) for v in data.iloc[i, 0:6].values.tolist()) + "', " + "{0}".format(data.iloc[i, 6]) + ")"
-        f.write("INSERT INTO {tabela} {stolpci} VALUES {vrednosti} \n".format(tabela="igralec", stolpci=stolpci, vrednosti=vrednosti))
+        f.write("INSERT INTO {tabela} {stolpci} VALUES {vrednosti}; \n".format(tabela="igralec", stolpci=stolpci, vrednosti=vrednosti))
     f.close()
 
-#uvozi_igralec()
+uvozi_igralec()
 
 def uvozi_oseba():
     data = pd.read_csv("podatki/csv/oseba.csv")
@@ -53,10 +53,10 @@ def uvozi_oseba():
     for i in range(len(data.index)):
         stolpci = "(" + ", ".join(str(v) for v in list(data.columns)) + ")"
         vrednosti = "(" + str(data.iloc[i, 0]) + ", '" + "', '".join(str(v) for v in data.iloc[i, 1:].values.tolist()) + "')"
-        f.write("INSERT INTO {tabela} {stolpci} VALUES {vrednosti} \n".format(tabela="oseba", stolpci=stolpci, vrednosti=vrednosti))
+        f.write("INSERT INTO {tabela} {stolpci} VALUES {vrednosti}; \n".format(tabela="oseba", stolpci=stolpci, vrednosti=vrednosti))
     f.close()
 
-#uvozi_oseba() 
+uvozi_oseba() 
 
 def uvozi_tekma():
     data = pd.read_csv("podatki/csv/tekma.csv")
@@ -64,10 +64,10 @@ def uvozi_tekma():
     for i in range(len(data.index)):
         stolpci = "(" + ", ".join(str(v) for v in list(data.columns)) + ")"
         vrednosti = "(" + str(data.iloc[i, 0]) + ", '" + "', '".join(str(v) for v in data.iloc[i, 1:3].values.tolist()) + "', " + ", ".join(str(v) for v in data.iloc[i, 3:].values.tolist()) + ")"
-        f.write("INSERT INTO {tabela} {stolpci} VALUES {vrednosti} \n".format(tabela="tekma", stolpci=stolpci, vrednosti=vrednosti))
+        f.write("INSERT INTO {tabela} {stolpci} VALUES {vrednosti}; \n".format(tabela="tekma", stolpci=stolpci, vrednosti=vrednosti))
     f.close()
 
-#uvozi_tekma()
+uvozi_tekma()
 
 def uvozi_zaposlen():
     data = pd.read_csv("podatki/csv/zaposlen.csv")
@@ -75,10 +75,10 @@ def uvozi_zaposlen():
     for i in range(len(data.index)):
         stolpci = "(" + ", ".join(str(v) for v in list(data.columns)) + ")"
         vrednosti = "('" + "', '".join(str(v) for v in data.iloc[i, 0:2].values.tolist()) + "', " + "{0}".format(data.iloc[i, 2]) + ")"
-        f.write("INSERT INTO {tabela} {stolpci} VALUES {vrednosti} \n".format(tabela="zaposlen", stolpci=stolpci, vrednosti=vrednosti))
+        f.write("INSERT INTO {tabela} {stolpci} VALUES {vrednosti}; \n".format(tabela="zaposlen", stolpci=stolpci, vrednosti=vrednosti))
     f.close()
 
-#uvozi_zaposlen()
+uvozi_zaposlen()
 
 def ustvari_tabele():
     with open("klub.sql") as f:
@@ -91,7 +91,7 @@ def uvoziSQL():
         with open("podatki/sql/{0}".format(datoteka)) as f:
             koda = f.read()
             cur.execute(koda)
-        conn.commit()
+            conn.commit()
 
 ustvari_tabele()
 uvoziSQL()
