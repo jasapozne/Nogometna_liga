@@ -21,18 +21,18 @@ CREATE TABLE oseba (
 
 CREATE TABLE igralec (
     pozicija TEXT NOT NULL,
-    visina INTEGER NOT NULL,
-    teza INTEGER NOT NULL,
-    vrednost INTEGER NOT NULL,
-    datum_zacetka DATE NOT NULL DEFAULT now(),
-    datum_konca DATE NOT NULL DEFAULT now(),
+    visina TEXT NOT NULL,
+    teza TEXT NOT NULL,
+    vrednost TEXT NOT NULL,
+    zacetek_pogodbe DATE NOT NULL DEFAULT now(),
+    konec_pogodbe DATE NOT NULL DEFAULT now(),
     emso INTEGER NOT NULL REFERENCES oseba(emso) PRIMARY KEY
 );
 
 CREATE TABLE zaposlen (
     emso INTEGER NOT NULL REFERENCES oseba(emso),
     delovno_mesto TEXT NOT NULL,
-    placa INTEGER NOT NULL
+    placa TEXT NOT NULL
 );
 
 CREATE TABLE tekma (

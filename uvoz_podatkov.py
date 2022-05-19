@@ -92,12 +92,18 @@ def ustvari_tabele():
         cur.execute(koda)
     conn.commit()
 
-def uvoziSQL():
-    for datoteka in os.listdir("podatki/sql"):
-        with open("podatki/sql/{0}".format(datoteka)) as f:
-            koda = f.read()
-            cur.execute(koda)
-            conn.commit()
+def uvoziSQL(datoteka):
+    with open("podatki/sql/{0}".format(datoteka)) as f:
+        koda = f.read()
+        cur.execute(koda)
+    conn.commit()
 
 ustvari_tabele()
-uvoziSQL()
+uvoziSQL("ekipa.sql")
+uvoziSQL("oseba.sql")
+uvoziSQL("igralec.sql")
+uvoziSQL("zaposlen.sql")
+uvoziSQL("tekma.sql")
+uvoziSQL("goli.sql")
+
+
