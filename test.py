@@ -1,4 +1,4 @@
 import os
 
 for x in os.listdir("podatki/sql"):
-    print(x)
+    print("podatki/sql/{0}".format(x))
