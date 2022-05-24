@@ -1,0 +1,41 @@
+<html>
+<head>
+    <title>Seznam tekem</title>
+</head>
+<p>
+    <a href="../"><button>Domov</button></a>
+    <a href="/ekipa"><button>Ekipe</button></a>
+    <a href="/oseba"><button>Seznam vseh oseb v ligi</button></a>
+    <a href="/igralec"><button>Igralci</button></a>
+    <a href="/zaposlen"><button>Zaposleni</button></a>
+    <a href="/tekma"><button>Tekme</button></a>
+    <a href="/goli"><button>Seznam golov</button></a>
+ </p>
+<body>
+    <h2>Seznam vseh odigranih tekem v ligi</h2>
+
+    <table cellpadding="0" cellspacing="0" border="1">
+    <tr>
+        <th>ID tekme</th>
+        <th>Domača ekipa</th>
+        <th>Gostujoča ekipa</th>
+        <th>Goli domači</th>
+        <th>Goli gosti</th>
+    </tr>
+    %for (id_tekme, domaca_ekipa, tuja_ekipa, goli_domace, goli_tuje) in tekma:
+        <tr>
+            <td>{{id_tekme}}</td>
+            <td>{{domaca_ekipa}}</td>
+            <td>{{tuja_ekipa}}</td>
+            <td>{{goli_domace}}</td>
+            <td>{{goli_tuje}}</td>
+        </tr>
+    %end
+    </table>
+
+    <br>
+
+    <form>
+        <input type="button" value="Nazaj" onclick="history.back()">
+    </form>
+</body>
