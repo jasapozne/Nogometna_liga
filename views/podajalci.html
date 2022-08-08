@@ -1,0 +1,25 @@
+%rebase('base.html', naslov='Seznam najboljših podajalcev')
+ </p>
+<body>
+
+    <table cellpadding="0" cellspacing="0" border="1">
+    <tr>
+        <th>Igralec</th>
+        <th>Število podaj</th>
+        <th>Ekipa</th>
+    </tr>
+    %for (ime_podajalca,priimek_podajalca, stevilo_podaj,ekipa) in podajalci:
+        <tr>
+            <td>{{ime_podajalca}} {{priimek_podajalca}}</td>
+            <td>{{stevilo_podaj}}</td>
+            <td>{{ekipa}}</td>
+        </tr>
+    %end
+    </table>
+
+    <br>
+
+    <form>
+        <input type="button" value="Nazaj" onclick="history.back()">
+    </form>
+</body>

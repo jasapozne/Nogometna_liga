@@ -1,25 +1,31 @@
 %rebase('base.html', naslov='Seznam zaposlenih v ligi')
 
-    <h2>Seznam zaposlenih v ligi</h2>
-
-    <table cellpadding="0" cellspacing="0" border="1">
-    <tr>
-        <th>EMŠO</th>
-        <th>Delovno mesto</th>
-        <th>Plača</th>
-    </tr>
-    %for (delovno_mesto, placa, emso) in zaposlen:
+    <body>
+    
+        <table cellpadding="0" cellspacing="0" border="1">
         <tr>
-            <td>{{emso}}</td>
-            <td>{{delovno_mesto}}</td>
-            <td>{{placa}}</td>
+            <th>Ime</th>
+            <th>Priimek</th>
+            <th>Delovno mesto</th>
+            <th>Plača</th>
+            <th>Ekipa</th>
         </tr>
-    %end
-    </table>
-
-    <br>
-
-    <form>
-        <input type="button" value="Nazaj" onclick="history.back()">
-    </form>
-
+        %for (ime,priimek,delovno_mesto, placa,ekipa) in zaposlen:
+            <tr>
+                <td>{{ime}}</td>
+                <td>{{priimek}}</td>
+                <td>{{delovno_mesto}}</td>
+                <td>{{placa}}</td>
+                <td>{{ekipa}}</td>
+    
+            </tr>
+        %end
+        </table>
+    
+        <br>
+    
+        <form>
+            <input type="button" value="Nazaj" onclick="history.back()">
+        </form>
+    </body>
+    
