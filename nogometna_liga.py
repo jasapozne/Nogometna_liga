@@ -1,4 +1,4 @@
-from bottle import *
+from bottleext import *
 import sqlite3
 #import auth_public as auth
 import psycopg2, psycopg2.extensions, psycopg2.extras

@@ -1,18 +1,4 @@
-<html>
-<head>
-    <title>Seznam golov</title>
-</head>
-<p>
-    <a href="../"><button>Domov</button></a>
-    <a href="/ekipa"><button>Ekipe</button></a>
-    <a href="/oseba"><button>Seznam vseh oseb v ligi</button></a>
-    <a href="/igralec"><button>Igralci</button></a>
-    <a href="/zaposlen"><button>Zaposleni</button></a>
-    <a href="/tekma"><button>Tekme</button></a>
-    <a href="/goli"><button>Seznam golov</button></a>
- </p>
-<body>
-    <h2>Seznam vseh zabeleženih golov v ligi</h2>
+%rebase('base.html', naslov='Seznam vseh zabeleženih golov v ligi')
 
     <table cellpadding="0" cellspacing="0" border="1">
     <tr>
@@ -34,4 +20,4 @@
     <form>
         <input type="button" value="Nazaj" onclick="history.back()">
     </form>
-</body>
+
