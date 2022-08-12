@@ -6,11 +6,41 @@ psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
 
 from auth import *
 
-# KONFIGURACIJA
+# KONFIGURACIJA 
 baza_datoteka = "sem2022_jasap"
 
 # Odkomentiraj, če želiš sporočila o napakah
 debug(True)
+
+
+
+
+
+
+
+
+napakaSporocilo = None 
+def nastaviSporocilo(sporocilo = None):
+    global napakaSporocilo
+    staro = napakaSporocilo
+    napakaSporocilo = sporocilo
+    return staro
+
+
+####UPORABNIKI
+@get("/prijava")
+def registracija_get():
+    return template('prijava.html', prijava=cur)
+
+@post("/prijava")
+def registracija_post():
+    emso = request.forms.get("emso")
+    uporabnisko_ime = request.forms.get("uporabnisko_ime")
+    geslo = request.forms.get("geslo")
+    ponovno_geslo = request.froms.get("geslo2")
+
+     
+     
 
 
 @get('/')
