@@ -16,7 +16,9 @@ CREATE TABLE oseba (
     ime TEXT NOT NULL,
     priimek TEXT NOT NULL,
     rojstni_dan DATE NOT NULL DEFAULT now(),
-    ekipa TEXT NOT NULL REFERENCES ekipa(ime)
+    ekipa TEXT NOT NULL REFERENCES ekipa(ime),
+    uporabnisko_ime TEXT UNIQUE,
+    geslo TEXT
 );
 
 CREATE TABLE igralec (
