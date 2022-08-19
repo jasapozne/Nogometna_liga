@@ -1,16 +1,20 @@
 %rebase('base.html', naslov='Seznam vseh zabeleženih golov v ligi')
 
-<body>
+<div class="jumbotron" align="center">
+    <div class="input-group justify-content-center">
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Iskanje" title="Vnesi besedo">
+    </div>
 
+    <br>
 
-    <table cellpadding="0" cellspacing="0" border="1">
-    <tr>
-        <th>Domača ekipa</th>
-        <th>Gostujoča ekipa</th>
-        <th>Strelec</th>
-        <th>Podajalec</th>
-        <th>Ekipa</th>
-    </tr>
+    <table class="table table-striped" id="myTable" align="center">
+        <thead class="thead-dark">
+            <th>Domača ekipa</th>
+            <th>Gostujoča ekipa</th>
+            <th>Strelec</th>
+            <th>Podajalec</th>
+            <th>Ekipa</th>
+        </thead>
     %for (domaca_ekipa,tuja_ekipa, ime_strelca,priimek_strelca, ime_podajalca, priimek_podajalca, ekipa) in goli:
         <tr>
             <td>{{domaca_ekipa}}</td>
@@ -21,10 +25,29 @@
         </tr>
     %end
     </table>
-
-    <br>
-
-    <div class="container" align="center">
-        <input class="btn btn-secondary" value="Nazaj" onclick="history.back()">
-    </div>
-</body>
+</div>
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        th = table.getElementsByTagName("th")
+        for (i = 1; i < tr.length; i++) {
+            td = tr[i];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+<br>
+<div class="container" align="center">
+    <input class="btn btn-secondary" value="Nazaj" onclick="history.back()">
+</div>

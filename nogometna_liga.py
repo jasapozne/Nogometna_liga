@@ -19,6 +19,7 @@ debug(True)
 
 
 
+
 napakaSporocilo = None 
 def nastaviSporocilo(sporocilo = None):
     global napakaSporocilo
@@ -28,16 +29,17 @@ def nastaviSporocilo(sporocilo = None):
 
 
 ####UPORABNIKI
-@get("/prijava")
-def registracija_get():
-    return template('prijava.html', prijava=cur)
-
-@post("/prijava")
-def registracija_post():
-    emso = request.forms.get("emso")
-    uporabnisko_ime = request.forms.get("uporabnisko_ime")
-    geslo = request.forms.get("geslo")
-    ponovno_geslo = request.froms.get("geslo2")
+@get('/prijava')
+def prijava_get():
+    return template('prijava.html')
+ 
+#@post("/prijava")
+#def prijava_post():
+#    emso = request.forms.get("emso")
+#    uporabnisko_ime = request.forms.get("uporabnisko_ime")
+#    geslo = request.forms.get("geslo")
+#    ponovno_geslo = request.froms.get("geslo2") 
+#    uporabnik = cur.execute("""SELECT * FROM oseba WHERE emso = ? """)
 
      
      
@@ -90,7 +92,7 @@ def strelci():
                 LEFT JOIN oseba ON oseba.emso = goli.strelec
                 GROUP BY oseba.ime,oseba.priimek,oseba.ekipa
                 ORDER BY count(strelec) DESC
-                LIMIT 20""")
+                """)
     return template('strelci.html', strelci=cur)
 
 @get('/podajalci')
@@ -99,13 +101,16 @@ def podajalci():
                 LEFT JOIN oseba ON oseba.emso = goli.podajalec
                 GROUP BY oseba.ime,oseba.priimek,oseba.ekipa
                 ORDER BY count(podajalec) DESC
-                LIMIT 20""")
+                """)
     return template('podajalci.html', podajalci=cur)
 
 @get('/lestvica')
 def lestvica():
     
     cur.execute(""" 
+    DROP VIEW IF EXISTS domaca_lestvica;
+    DROP VIEW IF EXISTS gostujoca_lestvica;
+
     CREATE VIEW domaca_lestvica AS
     SELECT domaca_ekipa AS ekipa, sum(CASE WHEN goli_domace > goli_tuje THEN 1 ELSE 0 END)+ sum(CASE WHEN goli_domace = goli_tuje THEN 1 ELSE 0 END) + sum(CASE WHEN goli_domace < goli_tuje THEN 1 ELSE 0 END)
     AS tekme,sum(CASE WHEN goli_domace > goli_tuje THEN 1 ELSE 0 END) AS zmage, sum(CASE WHEN goli_domace = goli_tuje THEN 1 ELSE 0 END) AS remi,
@@ -130,6 +135,8 @@ def lestvica():
 
     """)
     return template('lestvica.html', lestvica=cur)
+
+
 
 
 

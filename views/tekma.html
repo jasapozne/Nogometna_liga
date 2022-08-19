@@ -1,30 +1,63 @@
 %rebase('base.html', naslov='Seznam vseh odigranih tekem v ligi')
 
-<body>
-
-
-    <table cellpadding="0" cellspacing="0" border="1">
-    <tr>
-        <th>ID tekme</th>
-        <th>Domača ekipa</th>
-        <th>Gostujoča ekipa</th>
-        <th>Goli domači</th>
-        <th>Goli gosti</th>
-    </tr>
-    %for (id_tekme, domaca_ekipa, tuja_ekipa, goli_domace, goli_tuje) in tekma:
-        <tr>
-            <td>{{id_tekme}}</td>
-            <td>{{domaca_ekipa}}</td>
-            <td>{{tuja_ekipa}}</td>
-            <td>{{goli_domace}}</td>
-            <td>{{goli_tuje}}</td>
-        </tr>
-    %end
-    </table>
-
-    <br>
-
-    <div class="container" align="center">
-        <input class="btn btn-secondary" value="Nazaj" onclick="history.back()">
+<div class="jumbotron" align="center">
+    <div class="input-group justify-content-center">
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Iskanje" title="Vnesi besedo">
+        <div class="input-group-append ">
+            <button type="submit" class="btn btn-success">Dodaj tekmo</button>
+            <button type="submit" class="btn btn-danger">Odstrani tekmo</button>
+        </div>
     </div>
-</body>
+    
+    <br>
+    <table class="table table-striped" id="myTable" align="center">
+        <thead class="thead-dark">
+            <tr>
+                <th>ID tekme</th>
+                <th>Domača ekipa</th>
+                <th>Gostujoča ekipa</th>
+                <th>Goli domači</th>
+                <th>Goli gosti</th>
+            </tr>
+        </thead>
+        %for (id_tekme, domaca_ekipa, tuja_ekipa, goli_domace, goli_tuje) in tekma:
+            <tr>
+                <td>{{id_tekme}}</td>
+                <td>{{domaca_ekipa}}</td>
+                <td>{{tuja_ekipa}}</td>
+                <td>{{goli_domace}}</td>
+                <td>{{goli_tuje}}</td>
+            </tr>
+        %end
+    </table>
+</div>
+
+<br>
+<div class="container" align="center">
+    <input class="btn btn-secondary" value="Nazaj" onclick="history.back()">
+</div>
+
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        th = table.getElementsByTagName("th")
+        for (i = 1; i < tr.length; i++) {
+            td = tr[i];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+
+
+

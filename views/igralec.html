@@ -1,37 +1,70 @@
 %rebase('base.html', naslov='Seznam igralcev')
 
-<body>
-
-    <table cellpadding="0" cellspacing="0" border="1">
-    <tr>
-        <th>Ime</th>
-        <th>Priimek</th>
-        <th>Pozicija</th>
-        <th>Višina</th>
-        <th>Teža</th>
-        <th>Začetek pogodbe</th>
-        <th>Konec pogodbe</th>
-        <th>Vrednost</th>
-        <th>Ekipa</th>
-    </tr>
-    %for (ime, priimek, pozicija, visina, teza, zacetek_pogodbe, konec_pogodbe, vrednost, ekipa) in igralec:
-        <tr>
-            <td>{{ime}}</td>
-            <td>{{priimek}}</td>
-            <td>{{pozicija}}</td>
-            <td>{{visina}}</td>
-            <td>{{teza}}</td>
-            <td>{{zacetek_pogodbe}}</td>
-            <td>{{konec_pogodbe}}</td>
-            <td>{{vrednost}}</td>
-            <td>{{ekipa}}</td>
-        </tr>
-    %end
-    </table>
-
-    <br>
-
-    <div class="container" align="center">
-        <input class="btn btn-secondary" value="Nazaj" onclick="history.back()">
+<div class="jumbotron" align="center">
+    <div class="input-group justify-content-center">
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Iskanje" title="Vnesi besedo">
+        <div class="input-group-append ">
+            <button type="submit" class="btn btn-success">Dodaj igralca</button>
+            <button type="submit" class="btn btn-danger">Odstrani igralca</button>
+        </div>
     </div>
-</body>
+    
+    <br>
+    <table class="table table-striped" id="myTable" align="center">
+        <thead class="thead-dark">
+            <tr>
+                <th>Ime</th>
+                <th>Priimek</th>
+                <th>Pozicija</th>
+                <th>Višina</th>
+                <th>Teža</th>
+                <th>Začetek pogodbe</th>
+                <th>Konec pogodbe</th>
+                <th>Vrednost</th>
+                <th>Ekipa</th>
+            </tr>
+        </thead>
+        %for (ime, priimek, pozicija, visina, teza, zacetek_pogodbe, konec_pogodbe, vrednost, ekipa) in igralec:
+            <tr>
+                <td>{{ime}}</td>
+                <td>{{priimek}}</td>
+                <td>{{pozicija}}</td>
+                <td>{{visina}}</td>
+                <td>{{teza}}</td>
+                <td>{{zacetek_pogodbe}}</td>
+                <td>{{konec_pogodbe}}</td>
+                <td>{{vrednost}}</td>
+                <td>{{ekipa}}</td>
+            </tr>
+        %end
+    </table>
+</div>
+
+<br>
+<div class="container" align="center">
+    <input class="btn btn-secondary" value="Nazaj" onclick="history.back()">
+</div>
+
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        th = table.getElementsByTagName("th")
+        for (i = 1; i < tr.length; i++) {
+            td = tr[i];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+
+

@@ -1,16 +1,21 @@
 %rebase('base.html', naslov='Lestvica ekip IV. amaterske nogometne lige')
- </p>
-<body>
 
-    <table cellpadding="0" cellspacing="0" border="1">
-    <tr>
+<div class="jumbotron" align="center">
+    <div class="input-group justify-content-center">
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Iskanje" title="Vnesi besedo">
+    </div>
+
+    <br>
+
+    <table class="table table-striped" id="myTable" align="center">
+    <thead class="thead-dark">
         <th>Ekipa</th>
         <th>Število odigranih tekem</th>
         <th>Zmage</th>
         <th>Remijij</th>
         <th>Porazi</th>
         <th>Točke</th>
-    </tr>
+    </thead>
     %for (ekipa,tekme,zmage,remi,porazi,tocke) in lestvica:
         <tr>
             <td>{{ekipa}}</td>
@@ -22,10 +27,29 @@
         </tr>
     %end
     </table>
-
-    <br>
-
-    <form>
-        <input type="button" value="Nazaj" onclick="history.back()">
-    </form>
-</body>
+</div>
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        th = table.getElementsByTagName("th")
+        for (i = 1; i < tr.length; i++) {
+            td = tr[i];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+<br>
+<form>
+    <input type="button" value="Nazaj" onclick="history.back()">
+</form>

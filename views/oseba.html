@@ -1,28 +1,59 @@
 %rebase('base.html', naslov='Seznam vseh oseb v ligi')
 
-<body>
-
-
-    <table cellpadding="0" cellspacing="0" border="1">
-    <tr>
-        <th>Ime</th>
-        <th>Priimek</th>
-        <th>Rojstni dan</th>
-        <th>Ekipa</th>
-    </tr>
-    %for ( ime, priimek, rojstni_dan, ekipa) in oseba:
-        <tr>
-            <td>{{ime}}</td>
-            <td>{{priimek}}</td>
-            <td>{{rojstni_dan}}</td>
-            <td>{{ekipa}}</td>
-        </tr>
-    %end
-    </table>
-
-    <br>
-
-    <div class="container" align="center">
-        <input class="btn btn-secondary" value="Nazaj" onclick="history.back()">
+<div class="jumbotron" align="center">
+    <div class="input-group justify-content-center">
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Iskanje" title="Vnesi besedo">
+        <div class="input-group-append ">
+            <button type="submit" class="btn btn-success">Dodaj osebo</button>
+            <button type="submit" class="btn btn-danger">Odstrani osebo</button>
+        </div>
     </div>
-</body>
+    
+    <br>
+    <table class="table table-striped" id="myTable" align="center">
+        <thead class="thead-dark">
+            <tr>
+                <th>Ime</th>
+                <th>Priimek</th>
+                <th>Rojstni dan</th>
+                <th>Ekipa</th>
+            </tr>
+        </thead>
+        %for ( ime, priimek, rojstni_dan, ekipa) in oseba:
+            <tr>
+                <td>{{ime}}</td>
+                <td>{{priimek}}</td>
+                <td>{{rojstni_dan}}</td>
+                <td>{{ekipa}}</td>
+            </tr>
+        %end
+    </table>
+</div>
+
+<br>
+<div class="container" align="center">
+    <input class="btn btn-secondary" value="Nazaj" onclick="history.back()">
+</div>
+
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        th = table.getElementsByTagName("th")
+        for (i = 1; i < tr.length; i++) {
+            td = tr[i];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+

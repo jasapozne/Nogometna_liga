@@ -1,27 +1,61 @@
 %rebase('base.html', naslov='Seznam ekip')
 
-
-<body>
-
-
-    <table cellpadding="0" cellspacing="0" border="1" align="center">
-    <tr>
-        <th>Ime ekipe</th>
-        <th>Stadion</th>
-        <th>Mesto</th>
-    </tr>
-    %for (ime, stadion, mesto) in ekipa:
-        <tr>
-            <td>{{ime}}</td>
-            <td>{{stadion}}</td>
-            <td>{{mesto}}</td>
-        </tr>
-    %end
-    </table>
-
-    <br>
-
-    <div class="container" align="center">
-        <input class="btn btn-secondary" value="Nazaj" onclick="history.back()">
+<div class="jumbotron" align="center">
+    <div class="input-group justify-content-center">
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Iskanje" title="Vnesi besedo">
+        <div class="input-group-append ">
+            <button type="submit" class="btn btn-success">Dodaj ekipo</button>
+            <button type="submit" class="btn btn-danger">Odstrani ekipo</button>
+        </div>
     </div>
-</body>
+    
+    <br>
+    <table class="table table-striped" id="myTable" align="center">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    Ekipa
+                </th>
+                <th>
+                    Stadion
+                </th>
+                <th>
+                    Mesto
+                </th>
+            </tr>
+        </thead>
+        %for (ime, stadion, mesto) in ekipa:
+            <tr>
+                <td>{{ime}}</td>
+                <td>{{stadion}}</td>
+                <td>{{mesto}}</td>
+            </tr>
+        %end
+    </table>
+</div>
+
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        th = table.getElementsByTagName("th")
+        for (i = 1; i < tr.length; i++) {
+            td = tr[i];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+<br>
+<div class="container" align="center">
+    <input class="btn btn-secondary" value="Nazaj" onclick="history.back()">
+</div>

@@ -1,13 +1,18 @@
 %rebase('base.html', naslov='Seznam najboljših strelcev')
 
+<div class="jumbotron" align="center">
+    <div class="input-group justify-content-center">
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Iskanje" title="Vnesi besedo">
+    </div>
 
-<body>
-    <table cellpadding="0" cellspacing="0" border="1">
-    <tr>
-        <th>Igralec</th>
-        <th>Število zadetkov</th>
-        <th>Ekipa</th>
-    </tr>
+    <br>
+    
+    <table class="table table-striped" id="myTable" align="center">
+        <thead class="thead-dark">
+            <th>Igralec</th>
+            <th>Število zadetkov</th>
+            <th>Ekipa</th>
+        </thead>
     %for (ime_strelca,priimek_strelca, stevilo_golov,ekipa) in strelci:
         <tr>
             <td>{{ime_strelca}} {{priimek_strelca}}</td>
@@ -16,10 +21,29 @@
         </tr>
     %end
     </table>
-
-    <br>
-
-    <div class="container" align="center">
-        <input class="btn btn-secondary" value="Nazaj" onclick="history.back()">
-    </div>
-</body>
+</div>
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        th = table.getElementsByTagName("th")
+        for (i = 1; i < tr.length; i++) {
+            td = tr[i];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+<br>
+<div class="container" align="center">
+    <input class="btn btn-secondary" value="Nazaj" onclick="history.back()">
+</div>
