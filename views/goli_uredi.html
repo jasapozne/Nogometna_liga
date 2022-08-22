@@ -1,0 +1,21 @@
+%rebase('base.html', naslov='Urejanje zadetka')
+
+<div class="jumbotron">
+    <div class="container">    
+        <form action="{{url('goli_uredi_post', id_tekme=gol[0])}}", method="post">
+                <div class="form-group col-mb-3">
+                    <label for="nov_id">id_tekme</label>
+                    <input id="nov_id" name="nov_id" type="text" class="form-control" placeholder="Nov ID tekme" value="{{gol[0]}}" required="required">
+                </div>
+                <div class="form-group col-mb-3">
+                    <label for="strelec">Strelec</label>
+                    <input id="strelec" name="strelec" type="text" class="form-control" placeholder="Strelec" value="{{gol[1]}}" required="required">
+                </div>
+                <div class="form-group col-mb-3">
+                    <label for="podajalec">Podajalec</label>
+                    <input id="podajalec" name="podajalec" type="text" class="form-control" placeholder="Podajalec" value="{{gol[2]}}" required="required">
+                </div>
+            <button type="submit" class="btn btn-primary">Uredi zadetek</button>
+        </form>
+    </div>
+    </div>

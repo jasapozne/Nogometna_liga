@@ -102,29 +102,80 @@ def ekipa_odstrani(ime):
 ###GOLI
 @get('/goli')
 def goli():
-    cur.execute("""SELECT tekma.domaca_ekipa, tekma.tuja_ekipa,oseba.ime,oseba.priimek, podaja.ime,podaja.priimek,oseba.ekipa from goli
+    cur.execute("""SELECT tekma.id_tekme, goli.strelec, goli.podajalec, tekma.domaca_ekipa, tekma.tuja_ekipa,oseba.ime,oseba.priimek, podaja.ime,podaja.priimek,oseba.ekipa from goli
                     JOIN oseba ON oseba.emso = goli.strelec
                     JOIN oseba AS podaja ON podaja.emso = goli.podajalec 
                     JOIN tekma ON tekma.id_tekme = goli.id_tekme
+                    ORDER BY id_tekme DESC
                     """)
     return template('goli.html', goli=cur)
 
+@get('/goli_dodaj')
+def goli_dodaj():
+    return template('goli_dodaj.html')
+
+@post('/goli_dodaj')
+def goli_dodaj_post():
+    id_tekme = request.forms.id_tekme
+    strelec = request.forms.strelec
+    podajalec = request.forms.podajalec
+    cur.execute("""INSERT INTO goli (id_tekme, strelec, podajalec) VALUES (%s, %s, %s);""", (id_tekme, strelec, podajalec))
+    conn.commit()
+    redirect(url('goli'))
+
+@get('/goli_uredi/<id_tekme>/<strelec>/<podajalec>')
+def goli_uredi_get(id_tekme, strelec, podajalec):
+    cur.execute(""" SELECT * FROM goli WHERE id_tekme= %s AND strelec = %s AND podajalec = %s""", (id_tekme, strelec, podajalec))
+    gol = cur.fetchone()
+    return template('goli_uredi.html', gol=gol)
+
+@post('/goli_uredi/<id_tekme>')
+def goli_uredi_post(id_tekme):
+    strelec = request.forms.strelec
+    podajalec = request.forms.podajalec
+    cur.execute("""UPDATE goli SET strelec = %s, podajalec = %s WHERE id_tekme = %s;""", (strelec, podajalec, id_tekme))
+    redirect(url('goli'))
+
+
+@post('/goli/odstrani/<id_tekme>/<strelec>/<podajalec>')
+def goli_odstrani(id_tekme, strelec, podajalec): 
+    try:
+        cur.execute("DELETE FROM goli WHERE id_tekme = %s", (id_tekme, strelec, podajalec ))
+        conn.commit()
+    except:
+        conn.rollback()
+        nastaviSporocilo("Gola {}-{}-{} ni mogoče odstraniti, saj druge tabele vsebujejo sklice na ta gol".format(id_tekme, strelec, podajalec))
+    redirect(url('goli'))
+
+
+
+###IGRALEC
 @get('/igralec')
 def igralec():
     cur.execute("""SELECT oseba.ime, oseba.priimek, pozicija,visina,teza,zacetek_pogodbe,konec_pogodbe,vrednost, oseba.ekipa from igralec
                     LEFT JOIN oseba ON oseba.emso = igralec.emso""")
     return template('igralec.html', igralec=cur)
 
+
+
+###OSEBA
 @get('/oseba')
 def oseba():
     cur.execute("""SELECT ime,priimek,rojstni_dan,ekipa from oseba""")
     return template('oseba.html', oseba=cur)
 
+
+
+###TEKMA
 @get('/tekma')
 def tekma():
     cur.execute("""SELECT id_tekme,domaca_ekipa,tuja_ekipa,goli_domace,goli_tuje from tekma""")
     return template('tekma.html', tekma=cur)
 
+
+
+
+###ZAPOSLEN
 @get('/zaposlen')
 def zaposlen():
     cur.execute("""SELECT oseba.ime, oseba.priimek,delovno_mesto,placa,oseba.ekipa from zaposlen

@@ -1,33 +1,48 @@
-%rebase('base.html', naslov='Seznam vseh zabeleženih golov v ligi')
+%rebase('base.html', naslov='Seznam vseh zabeleženih zadetkov v ligi')
 
 <div class="jumbotron" align="center">
+
     <div class="input-group justify-content-center">
         <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Iskanje" title="Vnesi besedo">
+        <div class="input-group-append ">
+            <a class="btn btn-success" href="{{url('goli_dodaj')}}">Dodaj zadetek</a>
+        </div>
     </div>
-
+        
+    
+    
     <br>
-
     <table class="table table-striped" id="myTable" align="center">
         <thead class="thead-dark">
-            <th>Domača ekipa</th>
-            <th>Gostujoča ekipa</th>
-            <th>Strelec</th>
-            <th>Podajalec</th>
-            <th>Ekipa</th>
+            <tr>
+                <th>Domača ekipa</th>
+                <th>Gostujoča ekipa</th>
+                <th>Strelec</th>
+                <th>Podajalec</th>
+                <th>Ekipa</th>
+            </tr>
         </thead>
-    %for (domaca_ekipa,tuja_ekipa, ime_strelca,priimek_strelca, ime_podajalca, priimek_podajalca, ekipa) in goli:
-        <tr>
-            <td>{{domaca_ekipa}}</td>
-            <td>{{tuja_ekipa}}</td>
-            <td>{{ime_strelca}} {{priimek_strelca}}</td>
-            <td>{{ime_strelca}} {{priimek_podajalca}}</td>
-            <td>{{ekipa}}</td>
-        </tr>
-    %end
+        %for (id_tekme, strelec, podajalec, domaca_ekipa,tuja_ekipa, ime_strelca,priimek_strelca, ime_podajalca, priimek_podajalca, ekipa) in goli:
+            <tr>
+                <td style="display:none;">{{id_tekme}}</td>
+                <td style="display:none;">{{strelec}}</td>
+                <td style="display:none;">{{podajalec}}</td>
+                <td>{{domaca_ekipa}}</td>
+                <td>{{tuja_ekipa}}</td>
+                <td>{{priimek_strelca}}</td>
+                <td>{{priimek_podajalca}}</td>
+                <td>{{ekipa}}</td>
+                <td>
+                    <div class="btn-group " role="group">
+                        <form action="{{url('goli_uredi_get', id_tekme=id_tekme, strelec=strelec, podajalec=podajalec)}}" method="get">
+                            <button type="submit" class="btn btn-primary">Uredi</button>
+                        </form>
+                        <form action="{{url('goli_odstrani', id_tekme=id_tekme, strelec=strelec, podajalec=podajalec)}}" method="post">
+                            <button type="submit" class="btn btn-danger">Odstrani</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        %end
     </table>
-</div>
-
-<br>
-<div class="container" align="center">
-    <input class="btn btn-secondary" value="Nazaj" onclick="history.back()">
 </div>
