@@ -1,13 +1,22 @@
-%rebase('base.html', naslov='Seznam ekip')
+%setdefault('napaka', '')
+%rebase('base.html', naslov='Seznam ekip', napaka=napaka)
+
+    
 
 <div class="jumbotron" align="center">
+    %if napaka:
+        <div class="jumbotron" align="center">
+        
+        </div>
+    %end
     <div class="input-group justify-content-center">
         <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Iskanje" title="Vnesi besedo">
         <div class="input-group-append ">
-            <button type="submit" class="btn btn-success">Dodaj ekipo</button>
-            <button type="submit" class="btn btn-danger">Odstrani ekipo</button>
+            <a class="btn btn-success" href="{{url('ekipa_dodaj')}}">Dodaj ekipo</a>
         </div>
     </div>
+        
+    
     
     <br>
     <table class="table table-striped" id="myTable" align="center">
@@ -22,6 +31,9 @@
                 <th>
                     Mesto
                 </th>
+                <th>
+                    Urejanje
+                </th>
             </tr>
         </thead>
         %for (ime, stadion, mesto) in ekipa:
@@ -29,12 +41,21 @@
                 <td>{{ime}}</td>
                 <td>{{stadion}}</td>
                 <td>{{mesto}}</td>
+                <td>
+                    <div class="btn-group " role="group">
+                        <form action="{{url('ekipa_odstrani', ime=ime)}}" method="post">
+                            <button type="submit" class="btn btn-primary">Uredi</button>
+                            <input type="hidden" class="btn">
+                        </form>
+                    </div>
+                    <div class="btn-group " role="group">
+                        <form action="{{url('ekipa_odstrani', ime=ime)}}" method="post">
+                            <i></i>
+                            <button type="submit" class="btn btn-danger">Odstrani</button>
+                        </form>
+                    </div>
+                </td>
             </tr>
         %end
     </table>
-</div>
-
-<br>
-<div class="container" align="center">
-    <input class="btn btn-secondary" value="Nazaj" onclick="history.back()">
 </div>

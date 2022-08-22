@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS tekma;
 DROP TABLE IF EXISTS zaposlen;
 
 CREATE TABLE ekipa (
-    ime TEXT PRIMARY KEY,
+    ime TEXT UNIQUE PRIMARY KEY,
     mesto TEXT NOT NULL,
     stadion TEXT NOT NULL
 );

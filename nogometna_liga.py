@@ -20,7 +20,7 @@ debug(True)
 
 
 
-napakaSporocilo = None 
+napakaSporocilo = None
 def nastaviSporocilo(sporocilo = None):
     global napakaSporocilo
     staro = napakaSporocilo
@@ -49,10 +49,35 @@ def prijava_get():
 def index():
     return template('index.html') #index=cur
 
+###EKIPE
+
 @get('/ekipa')
 def ekipa():
     cur.execute("""SELECT ime,stadion,mesto from ekipa""")
     return template('ekipa.html', ekipa=cur)
+
+@get('/ekipa_dodaj')
+def ekipa_dodaj():
+    return template('ekipa_dodaj.html')
+
+@post('/ekipa_dodaj')
+def ekipa_dodaj_post():
+    ime = request.forms.ime
+    mesto = request.forms.mesto
+    stadion = request.forms.stadion
+    cur.execute("""INSERT INTO ekipa (ime, mesto, stadion) VALUES (%s, %s, %s);""", (ime, mesto, stadion))
+    conn.commit()
+    redirect(url('ekipa'))
+
+@post('/ekipa/<ime>')
+def ekipa_odstrani(ime): 
+    try:
+        cur.execute("DELETE FROM ekipa WHERE ime = %s", (ime, ))
+        conn.commit()
+    except:
+        conn.rollback()
+        nastaviSporocilo("Ekipe {} ni mogoče odstraniti, saj druge tabele vsebujejo sklice na to ekipo".format(ime))
+    redirect(url('ekipa'))
 
 @get('/goli')
 def goli():
