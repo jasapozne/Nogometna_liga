@@ -16,7 +16,7 @@ CREATE TABLE oseba (
     ime TEXT NOT NULL,
     priimek TEXT NOT NULL,
     rojstni_dan DATE NOT NULL DEFAULT now(),
-    ekipa TEXT NOT NULL REFERENCES ekipa(ime),
+    ekipa TEXT NOT NULL REFERENCES ekipa(ime) ON UPDATE CASCADE,
     uporabnisko_ime TEXT UNIQUE,
     geslo TEXT
 );
@@ -39,8 +39,8 @@ CREATE TABLE zaposlen (
 
 CREATE TABLE tekma (
     id_tekme INTEGER PRIMARY KEY,
-    domaca_ekipa TEXT NOT NULL REFERENCES ekipa(ime),
-    tuja_ekipa TEXT NOT NULL REFERENCES ekipa(ime),
+    domaca_ekipa TEXT NOT NULL REFERENCES ekipa(ime) ON UPDATE CASCADE,
+    tuja_ekipa TEXT NOT NULL REFERENCES ekipa(ime) ON UPDATE CASCADE,
     goli_domace INTEGER NOT NULL,
     goli_tuje INTEGER NOT NULL
 );

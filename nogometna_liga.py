@@ -69,7 +69,24 @@ def ekipa_dodaj_post():
     conn.commit()
     redirect(url('ekipa'))
 
-@post('/ekipa/<ime>')
+@get('/ekipa_uredi/<ime>')
+def ekipa_uredi_get(ime):
+    cur.execute(""" SELECT * FROM ekipa WHERE ime= %s""", (ime, ))
+    ekipa = cur.fetchone()
+    return template('ekipa_uredi.html', ekipa=ekipa)
+
+@post('/ekipa_uredi/<ime>')
+def ekipa_uredi_post(ime):
+    cur.execute(""" SELECT * FROM ekipa WHERE ime= %s""", (ime, ))
+    staro = cur.fetchone()
+    ime = request.forms.novo_ime
+    mesto = request.forms.mesto
+    stadion = request.forms.stadion
+    cur.execute("""UPDATE ekipa SET ime = %s, mesto = %s, stadion = %s WHERE ime = %s;""", (ime, mesto, stadion, staro[0]))
+    redirect(url('ekipa'))
+
+
+@post('/ekipa/odstrani/<ime>')
 def ekipa_odstrani(ime): 
     try:
         cur.execute("DELETE FROM ekipa WHERE ime = %s", (ime, ))
@@ -79,6 +96,10 @@ def ekipa_odstrani(ime):
         nastaviSporocilo("Ekipe {} ni mogoče odstraniti, saj druge tabele vsebujejo sklice na to ekipo".format(ime))
     redirect(url('ekipa'))
 
+
+
+
+###GOLI
 @get('/goli')
 def goli():
     cur.execute("""SELECT tekma.domaca_ekipa, tekma.tuja_ekipa,oseba.ime,oseba.priimek, podaja.ime,podaja.priimek,oseba.ekipa from goli

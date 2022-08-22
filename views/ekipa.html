@@ -43,14 +43,10 @@
                 <td>{{mesto}}</td>
                 <td>
                     <div class="btn-group " role="group">
-                        <form action="{{url('ekipa_odstrani', ime=ime)}}" method="post">
+                        <form action="{{url('ekipa_uredi_get', ime=ime)}}" method="get">
                             <button type="submit" class="btn btn-primary">Uredi</button>
-                            <input type="hidden" class="btn">
                         </form>
-                    </div>
-                    <div class="btn-group " role="group">
                         <form action="{{url('ekipa_odstrani', ime=ime)}}" method="post">
-                            <i></i>
                             <button type="submit" class="btn btn-danger">Odstrani</button>
                         </form>
                     </div>
