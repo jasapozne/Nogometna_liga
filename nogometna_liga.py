@@ -152,17 +152,109 @@ def goli_odstrani(id_tekme, strelec, podajalec):
 ###IGRALEC
 @get('/igralec')
 def igralec():
-    cur.execute("""SELECT oseba.ime, oseba.priimek, pozicija,visina,teza,zacetek_pogodbe,konec_pogodbe,vrednost, oseba.ekipa from igralec
+    cur.execute("""SELECT oseba.emso, oseba.ime, oseba.priimek, pozicija,visina,teza,zacetek_pogodbe,konec_pogodbe,vrednost, oseba.ekipa from igralec
                     LEFT JOIN oseba ON oseba.emso = igralec.emso""")
     return template('igralec.html', igralec=cur)
+
+@get('/igralec_dodaj')
+def igralec_dodaj():
+    return template('igralec_dodaj.html')
+
+@post('/igralec_dodaj')
+def igralec_dodaj_post():
+    emso = request.forms.emso
+    pozicija = request.forms.pozicija
+    visina = request.forms.visina
+    teza = request.forms.teza
+    vrednost = request.forms.vrednost
+    zacetek_pogodbe = request.forms.zacetek_pogodbe
+    konec_pogodbe = request.forms.konec_pogodbe
+    cur.execute("""INSERT INTO oseba (pozicija, visina, teza, vrednost, zacetek_pogodbe, konec_pogodbe, emso) VALUES (%s, %s, %s, %s, %s, %s, %s);""", (pozicija, visina, teza, vrednost, zacetek_pogodbe, konec_pogodbe, emso))
+    conn.commit()
+    redirect(url('igralec'))
+
+@get('/igralec_uredi/<emso>')
+def igralec_uredi_get(emso):
+    cur.execute(""" SELECT * FROM igralec WHERE emso= %s""", (emso, ))
+    igralec = cur.fetchone()
+    return template('igralec_uredi.html', igralec=igralec)
+
+@post('/igralec_uredi/<emso>')
+def igralec_uredi_post(emso):
+    cur.execute(""" SELECT * FROM igralec WHERE emso= %s""", (emso, ))
+    staro = cur.fetchone()
+    pozicija = request.forms.pozicija
+    visina = request.forms.visina
+    teza = request.forms.teza
+    vrednost = request.forms.vrednost
+    zacetek_pogodbe = request.forms.zacetek_pogodbe
+    konec_pogodbe = request.forms.konec_pogodbe
+    novi_emso = request.forms.novo_ime
+    cur.execute("""UPDATE igralec SET pozicija = %s, visina = %s, teza = %s, vrednost = %s, zacetek_pogodbe = %s, konec_pogodbe = %s, emso = %s WHERE emso = %s;""", (pozicija, visina, teza, vrednost, zacetek_pogodbe, konec_pogodbe, staro[0]))
+    redirect(url('igralec'))
+
+
+@post('/igralec/odstrani/<emso>')
+def igralec_odstrani(emso): 
+    try:
+        cur.execute("DELETE FROM igralec WHERE ime = %s", (emso, ))
+        conn.commit()
+    except:
+        conn.rollback()
+        nastaviSporocilo("Igralca {} ni mogoče odstraniti, saj druge tabele vsebujejo sklice na tega igralca".format(emso))
+    redirect(url('igralec'))
 
 
 
 ###OSEBA
 @get('/oseba')
 def oseba():
-    cur.execute("""SELECT ime,priimek,rojstni_dan,ekipa from oseba""")
+    cur.execute("""SELECT emso, ime,priimek,rojstni_dan,ekipa from oseba""")
     return template('oseba.html', oseba=cur)
+
+@get('/oseba_dodaj')
+def oseba_dodaj():
+    return template('oseba_dodaj.html')
+
+@post('/oseba_dodaj')
+def oseba_dodaj_post():
+    emso = request.forms.emso
+    ime = request.forms.ime
+    priimek = request.forms.priimek
+    rojstni_dan = request.forms.rojstni_dan
+    ekipa = request.forms.ekipa
+    cur.execute("""INSERT INTO oseba (emso, ime, priimek, rojstni_dan, ekipa) VALUES (%s, %s, %s, %s, %s);""", (emso, ime, priimek, rojstni_dan, ekipa))
+    conn.commit()
+    redirect(url('oseba'))
+
+@get('/oseba_uredi/<emso>')
+def oseba_uredi_get(emso):
+    cur.execute(""" SELECT * FROM oseba WHERE emso= %s""", (emso, ))
+    oseba = cur.fetchone()
+    return template('oseba_uredi.html', oseba=oseba)
+
+@post('/oseba_uredi/<emso>')
+def oseba_uredi_post(emso):
+    cur.execute(""" SELECT * FROM oseba WHERE emso= %s""", (emso, ))
+    staro = cur.fetchone()
+    emso = request.forms.nov_emso
+    ime = request.forms.ime
+    priimek = request.forms.priimek
+    rojstni_dan = request.forms.rojstni_dan
+    ekipa = request.forms.ekipa
+    cur.execute("""UPDATE oseba SET emso = %s, ime = %s, priimek = %s, rojstni_dan = %s, ekipa = %s WHERE ime = %s;""", (emso, ime, priimek, rojstni_dan, ekipa, staro[0]))
+    redirect(url('oseba'))
+
+
+@post('/oseba/odstrani/<emso>')
+def oseba_odstrani(emso): 
+    try:
+        cur.execute("DELETE FROM oseba WHERE emso = %s", (emso, ))
+        conn.commit()
+    except:
+        conn.rollback()
+        nastaviSporocilo("Osebe {} ni mogoče odstraniti, saj druge tabele vsebujejo sklice na to osebo".format(emso))
+    redirect(url('oseba'))
 
 
 
@@ -172,16 +264,103 @@ def tekma():
     cur.execute("""SELECT id_tekme,domaca_ekipa,tuja_ekipa,goli_domace,goli_tuje from tekma""")
     return template('tekma.html', tekma=cur)
 
+@get('/tekma_dodaj')
+def tekma_dodaj():
+    return template('tekma_dodaj.html')
+
+@post('/tekma_dodaj')
+def tekma_dodaj_post():
+    id_tekme = request.forms.id_tekme
+    domaca_ekipa = request.forms.domaca_ekipa
+    tuja_ekipa = request.forms.tuja_ekipa
+    goli_domace = request.forms.goli_domace
+    goli_tuje = request.forms.goli_tuje
+    cur.execute("""INSERT INTO tekma (id_tekme, domaca_ekipa, tuja_ekipa, goli_domace, goli_tuje) VALUES (%s, %s, %s);""", (id_tekme, domaca_ekipa, tuja_ekipa, goli_domace, goli_tuje))
+    conn.commit()
+    redirect(url('tekma'))
+
+@get('/tekma_uredi/<id_tekme>')
+def tekma_uredi_get(id_tekme):
+    cur.execute(""" SELECT * FROM tekma WHERE id_tekme= %s""", (id_tekme, ))
+    tekma = cur.fetchone()
+    return template('tekma_uredi.html', tekma=tekma)
+
+@post('/tekma_uredi/<id_tekme>')
+def tekma_uredi_post(id_tekme):
+    cur.execute(""" SELECT * FROM tekma WHERE id_tekme= %s""", (id_tekme, ))
+    staro = cur.fetchone()
+    id_tekme = request.forms.nov_id_tekme
+    domaca_ekipa = request.forms.domaca_ekipa
+    tuja_ekipa = request.forms.tuja_ekipa
+    goli_domace = request.forms.goli_domace
+    goli_tuje = request.forms.goli_tuje
+    cur.execute("""UPDATE tekma SET id_tekme = %s, domaca_ekipa = %s, tuja_ekipa = %s, goli_domace = %s, goli_tuje = %s WHERE emso = %s;""", (id_tekme, domaca_ekipa, tuja_ekipa, goli_domace, goli_tuje, staro[0]))
+    redirect(url('tekma'))
+
+
+@post('/tekma/odstrani/<id_tekme>')
+def tekma_odstrani(id_tekme): 
+    try:
+        cur.execute("DELETE FROM tekma WHERE id_tekme = %s", (id_tekme, ))
+        conn.commit()
+    except:
+        conn.rollback()
+        nastaviSporocilo("Tekme {} ni mogoče odstraniti, saj druge tabele vsebujejo sklice na to tekmo".format(id_tekme))
+    redirect(url('tekma'))
+
 
 
 
 ###ZAPOSLEN
 @get('/zaposlen')
 def zaposlen():
-    cur.execute("""SELECT oseba.ime, oseba.priimek,delovno_mesto,placa,oseba.ekipa from zaposlen
+    cur.execute("""SELECT oseba.emso, oseba.ime, oseba.priimek,delovno_mesto,placa,oseba.ekipa from zaposlen
                     LEFT JOIN oseba ON oseba.emso = zaposlen.emso""")
     return template('zaposlen.html', zaposlen=cur)
 
+@get('/zaposlen_dodaj')
+def zaposlen_dodaj():
+    return template('zaposlen_dodaj.html')
+
+@post('/zaposlen_dodaj')
+def zaposlen_dodaj_post():
+    emso = request.forms.emso
+    delovno_mesto = request.forms.delovno_mesto
+    placa = request.forms.placa
+    cur.execute("""INSERT INTO zaposlen (emso, delovno_mesto, placa) VALUES (%s, %s, %s);""", (emso, delovno_mesto, placa))
+    conn.commit()
+    redirect(url('zaposlen'))
+
+@get('/zaposlen_uredi/<emso>')
+def zaposlen_uredi_get(emso):
+    cur.execute(""" SELECT * FROM zaposlen WHERE emso= %s""", (emso, ))
+    zaposlen = cur.fetchone()
+    return template('zaposlen_uredi.html', zaposlen=zaposlen)
+
+@post('/zaposlen_uredi/<emso>')
+def zaposlen_uredi_post(emso):
+    cur.execute(""" SELECT * FROM zaposlen WHERE emso= %s""", (emso, ))
+    staro = cur.fetchone()
+    emso = request.forms.nov_emso
+    delovno_mesto = request.forms.delovno_mesto
+    placa = request.forms.placa
+    cur.execute("""UPDATE igralec SET emso = %s, delovno_mesto = %s, placa = %s WHERE emso = %s;""", (emso, delovno_mesto, placa, staro[0]))
+    redirect(url('zaposlen'))
+
+
+@post('/zaposlen/odstrani/<emso>')
+def zaposlen_odstrani(emso): 
+    try:
+        cur.execute("DELETE FROM zaposlen WHERE emso = %s", (emso, ))
+        conn.commit()
+    except:
+        conn.rollback()
+        nastaviSporocilo("Zaposlenega {} ni mogoče odstraniti, saj druge tabele vsebujejo sklice na tega zaposlenega".format(emso))
+    redirect(url('zaposlen'))
+
+
+
+####=======================
 
 @get('/strelci')
 def strelci():

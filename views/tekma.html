@@ -1,16 +1,45 @@
-%rebase('base.html', naslov='Seznam vseh odigranih tekem v ligi')
+%setdefault('napaka', '')
+%rebase('base.html', naslov='Seznam tekem', napaka=napaka)
+
+<script>
+    $(document).ready(function() {
+      $('#tabela').DataTable( {
+          "language": {
+              "lengthMenu": "Prikaži _MENU_ vrstic na stran",
+              "zeroRecords": "Na voljo ni izbranih podatkov.",
+              "info": "Stran _PAGE_ od _PAGES_",
+              "infoEmpty": "Ni podatkov.",
+              "infoFiltered": "(filtered from _MAX_ total records)",
+              "paginate": {
+                "first": "Prva",
+                "last": "Zadnja",
+                "next": "Naslednja",
+                "previous": "Predhodna"
+              },
+              "search": "Iskalnik:",
+          },
+          "columnDefs": [{target: 0, visible: false, searchable: false}]
+        } );
+    } );
+  </script>
+
+    
 
 <div class="jumbotron" align="center">
-    <div class="input-group justify-content-center">
-        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Iskanje" title="Vnesi besedo">
-        <div class="input-group-append ">
-            <button type="submit" class="btn btn-success">Dodaj tekmo</button>
-            <button type="submit" class="btn btn-danger">Odstrani tekmo</button>
+    %if napaka:
+        <div class="jumbotron" align="center">
+        
         </div>
+    %end
+    <div class="input-group justify-content-center">
+        <a class="btn btn-success" href="{{url('tekma_dodaj')}}">Dodaj tekmo</a>
     </div>
+
+        
+    
     
     <br>
-    <table class="table table-striped" id="myTable" align="center">
+    <table id="tabela" class="table table-striped" align="center">
         <thead class="thead-dark">
             <tr>
                 <th>ID tekme</th>
@@ -18,8 +47,10 @@
                 <th>Gostujoča ekipa</th>
                 <th>Goli domači</th>
                 <th>Goli gosti</th>
+                <th>Uredi</th>
             </tr>
         </thead>
+        <tbody>
         %for (id_tekme, domaca_ekipa, tuja_ekipa, goli_domace, goli_tuje) in tekma:
             <tr>
                 <td>{{id_tekme}}</td>
@@ -27,15 +58,24 @@
                 <td>{{tuja_ekipa}}</td>
                 <td>{{goli_domace}}</td>
                 <td>{{goli_tuje}}</td>
+                <td>
+                    <div class="btn-group " role="group">
+                        <form action="{{url('tekma_uredi_get', id_tekme=id_tekme)}}" method="get">
+                            <button type="submit" class="btn btn-primary">Uredi</button>
+                        </form>
+                        <form action="{{url('tekma_odstrani', id_tekme=id_tekme)}}" method="post">
+                            <button type="submit" class="btn btn-danger">Odstrani</button>
+                        </form>
+                    </div>
+                </td>
             </tr>
         %end
+        </tbody>
     </table>
+
 </div>
 
-<br>
-<div class="container" align="center">
-    <input class="btn btn-secondary" value="Nazaj" onclick="history.back()">
-</div>
+
 
 
 

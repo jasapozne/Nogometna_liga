@@ -1,0 +1,38 @@
+%rebase('base.html', naslov='Dodajanje ekipe')
+
+<div class="jumbotron">
+    <div class="container">    
+        <form action="{{url('ekipa_dodaj_post')}}", method="post">
+            <div class="form-group col-mb-3">
+                <label for="emso">EMŠO</label>
+                <input id="emso" name="emso" type="number" class="form-control" placeholder="EMŠO" required="required">
+            </div>
+            <div class="form-group col-mb-3">
+                <label for="pozicija">Pozicija</label>
+                <input id="pozicija" name="pozicija" type="text" class="form-control" placeholder="Pozicija" required="required">
+            </div>
+            <div class="form-group col-mb-3">
+                <label for="visina">Višina</label>
+                <input id="visina" name="visina" type="text" class="form-control" placeholder="Višina" required="required">
+            </div>
+            <div class="form-group col-mb-3">
+                <label for="teža">Teža</label>
+                <input id="teza" name="teza" type="number" class="form-control" placeholder="Teža" required="required">
+            </div>
+            <div class="form-group col-mb-3">
+                <label for="vrednost">Vrednost</label>
+                <input id="vrednost" name="vrednost" type="text" class="form-control" placeholder="Vrednost" required="required">
+            </div>
+            <div class="form-group col-mb-3">
+                <label for="zacetek_pogodbe">Začetek pogodbe</label>
+                <input id="zacetek_pogodbe" name="zacetek_pogodbe" type="text" class="form-control" placeholder="Začetek pogodbe" required="required">
+            </div>
+            <div class="form-group col-mb-3">
+                <label for="konec_pogodbe">Konec pogodbe</label>
+                <input id="konec_pogodbe" name="konec_pogodbe" type="text" class="form-control" placeholder="Konec pogodbe" required="required">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Dodaj ekipo</button>
+        </form>
+    </div>
+    </div>

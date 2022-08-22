@@ -1,18 +1,43 @@
-%rebase('base.html', naslov='Seznam igralcev')
+%setdefault('napaka', '')
+%rebase('base.html', naslov='Seznam ekip', napaka=napaka)
+
+<script>
+    $(document).ready(function() {
+      $('#tabela').DataTable( {
+          "language": {
+              "lengthMenu": "Prikaži _MENU_ vrstic na stran",
+              "zeroRecords": "Na voljo ni izbranih podatkov.",
+              "info": "Stran _PAGE_ od _PAGES_",
+              "infoEmpty": "Ni podatkov.",
+              "infoFiltered": "(filtered from _MAX_ total records)",
+              "paginate": {
+                "first": "Prva",
+                "last": "Zadnja",
+                "next": "Naslednja",
+                "previous": "Predhodna"
+              },
+              "search": "Iskalnik:",
+          },
+          "columnDefs": [{target: 0, visible: false, searchable: false}]
+        } );
+    } );
+  </script>
 
 <div class="jumbotron" align="center">
-    <div class="input-group justify-content-center">
-        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Iskanje" title="Vnesi besedo">
-        <div class="input-group-append ">
-            <button type="submit" class="btn btn-success">Dodaj igralca</button>
-            <button type="submit" class="btn btn-danger">Odstrani igralca</button>
+    %if napaka:
+        <div class="jumbotron" align="center">
+        
         </div>
+    %end
+    <div class="input-group justify-content-center">
+        <a class="btn btn-success" href="{{url('igralec_dodaj')}}">Dodaj igralca</a>
     </div>
-    
+
     <br>
-    <table class="table table-striped" id="myTable" align="center">
+    <table id="tabela" class="table table-striped" align="center">
         <thead class="thead-dark">
             <tr>
+                <th>EMŠO</th>
                 <th>Ime</th>
                 <th>Priimek</th>
                 <th>Pozicija</th>
@@ -22,10 +47,13 @@
                 <th>Konec pogodbe</th>
                 <th>Vrednost</th>
                 <th>Ekipa</th>
+                <th>Uredi</th>
             </tr>
         </thead>
-        %for (ime, priimek, pozicija, visina, teza, zacetek_pogodbe, konec_pogodbe, vrednost, ekipa) in igralec:
+        <tbody>
+        %for (emso, ime, priimek, pozicija, visina, teza, zacetek_pogodbe, konec_pogodbe, vrednost, ekipa) in igralec:
             <tr>
+                <td>{{emso}}</td>
                 <td>{{ime}}</td>
                 <td>{{priimek}}</td>
                 <td>{{pozicija}}</td>
@@ -35,15 +63,24 @@
                 <td>{{konec_pogodbe}}</td>
                 <td>{{vrednost}}</td>
                 <td>{{ekipa}}</td>
+                <td>
+                    <div class="btn-group " role="group">
+                        <form action="{{url('igralec_uredi_get', emso=emso)}}" method="get">
+                            <button type="submit" class="btn btn-primary">Uredi</button>
+                        </form>
+                        <form action="{{url('igralec_odstrani', emso=emso)}}" method="post">
+                            <button type="submit" class="btn btn-danger">Odstrani</button>
+                        </form>
+                    </div>
+                </td>
             </tr>
         %end
+        </tbody>
     </table>
+
 </div>
 
-<br>
-<div class="container" align="center">
-    <input class="btn btn-secondary" value="Nazaj" onclick="history.back()">
-</div>
+
 
 
 

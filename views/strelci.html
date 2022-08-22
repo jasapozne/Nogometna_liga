@@ -1,28 +1,54 @@
-%rebase('base.html', naslov='Seznam najboljših strelcev')
+%setdefault('napaka', '')
+%rebase('base.html', naslov='Lestvica strelcev', napaka=napaka)
+
+<script>
+    $(document).ready(function() {
+      $('#tabela').DataTable( {
+          "language": {
+              "lengthMenu": "Prikaži _MENU_ vrstic na stran",
+              "zeroRecords": "Na voljo ni izbranih podatkov.",
+              "info": "Stran _PAGE_ od _PAGES_",
+              "infoEmpty": "Ni podatkov.",
+              "infoFiltered": "(filtered from _MAX_ total records)",
+              "paginate": {
+                "first": "Prva",
+                "last": "Zadnja",
+                "next": "Naslednja",
+                "previous": "Predhodna"
+              },
+              "search": "Iskalnik:",
+          }
+        } );
+    } );
+  </script>
+
+    
 
 <div class="jumbotron" align="center">
-    <div class="input-group justify-content-center">
-        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Iskanje" title="Vnesi besedo">
-    </div>
-
-    <br>
-    
-    <table class="table table-striped" id="myTable" align="center">
-        <thead class="thead-dark">
-            <th>Igralec</th>
-            <th>Število zadetkov</th>
-            <th>Ekipa</th>
-        </thead>
-    %for (ime_strelca,priimek_strelca, stevilo_golov,ekipa) in strelci:
-        <tr>
-            <td>{{ime_strelca}} {{priimek_strelca}}</td>
-            <td>{{stevilo_golov}}</td>
-            <td>{{ekipa}}</td>
-        </tr>
+    %if napaka:
+        <div class="jumbotron" align="center">
+        
+        </div>
     %end
+    
+    <br>
+    <table id="tabela" class="table table-striped" align="center">
+        <thead class="thead-dark">
+            <tr>
+                <th>Igralec</th>
+                <th>Število zadetkov</th>
+                <th>Ekipa</th>
+            </tr>
+        </thead>
+        <tbody>
+        %for (ime_strelca,priimek_strelca, stevilo_golov,ekipa) in strelci:
+            <tr>
+                <td>{{ime_strelca}} {{priimek_strelca}}</td>
+                <td>{{stevilo_golov}}</td>
+                <td>{{ekipa}}</td>
+            </tr>
+        %end
+        </tbody>
     </table>
-</div>
-<br>
-<div class="container" align="center">
-    <input class="btn btn-secondary" value="Nazaj" onclick="history.back()">
+
 </div>

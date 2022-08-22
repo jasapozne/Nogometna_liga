@@ -1,6 +1,27 @@
 %setdefault('napaka', '')
 %rebase('base.html', naslov='Seznam ekip', napaka=napaka)
 
+<script>
+    $(document).ready(function() {
+      $('#tabela').DataTable( {
+          "language": {
+              "lengthMenu": "Prikaži _MENU_ vrstic na stran",
+              "zeroRecords": "Na voljo ni izbranih podatkov.",
+              "info": "Stran _PAGE_ od _PAGES_",
+              "infoEmpty": "Ni podatkov.",
+              "infoFiltered": "(filtered from _MAX_ total records)",
+              "paginate": {
+                "first": "Prva",
+                "last": "Zadnja",
+                "next": "Naslednja",
+                "previous": "Predhodna"
+              },
+              "search": "Iskalnik:",
+          }
+        } );
+    } );
+  </script>
+
     
 
 <div class="jumbotron" align="center">
@@ -10,16 +31,14 @@
         </div>
     %end
     <div class="input-group justify-content-center">
-        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Iskanje" title="Vnesi besedo">
-        <div class="input-group-append ">
-            <a class="btn btn-success" href="{{url('ekipa_dodaj')}}">Dodaj ekipo</a>
-        </div>
+        <a class="btn btn-success" href="{{url('ekipa_dodaj')}}">Dodaj ekipo</a>
     </div>
+
         
     
     
     <br>
-    <table class="table table-striped" id="myTable" align="center">
+    <table id="tabela" class="table table-striped" align="center">
         <thead class="thead-dark">
             <tr>
                 <th>
@@ -36,6 +55,7 @@
                 </th>
             </tr>
         </thead>
+        <tbody>
         %for (ime, stadion, mesto) in ekipa:
             <tr>
                 <td>{{ime}}</td>
@@ -53,5 +73,7 @@
                 </td>
             </tr>
         %end
+        </tbody>
     </table>
+
 </div>

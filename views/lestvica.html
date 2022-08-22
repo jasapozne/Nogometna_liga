@@ -1,35 +1,58 @@
-%rebase('base.html', naslov='Lestvica ekip IV. amaterske nogometne lige')
+%setdefault('napaka', '')
+%rebase('base.html', naslov='Lestvica ekip', napaka=napaka)
+
+<script>
+    $(document).ready(function() {
+      $('#tabela').DataTable( {
+          "language": {
+              "lengthMenu": "Prikaži _MENU_ vrstic na stran",
+              "zeroRecords": "Na voljo ni izbranih podatkov.",
+              "info": "Stran _PAGE_ od _PAGES_",
+              "infoEmpty": "Ni podatkov.",
+              "infoFiltered": "(filtered from _MAX_ total records)",
+              "paginate": {
+                "first": "Prva",
+                "last": "Zadnja",
+                "next": "Naslednja",
+                "previous": "Predhodna"
+              },
+              "search": "Iskalnik:",
+          }
+        } );
+    } );
+  </script>
 
 <div class="jumbotron" align="center">
-    <div class="input-group justify-content-center">
-        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Iskanje" title="Vnesi besedo">
-    </div>
+    %if napaka:
+        <div class="jumbotron" align="center">
+        
+        </div>
+    %end
 
     <br>
-
-    <table class="table table-striped" id="myTable" align="center">
-    <thead class="thead-dark">
-        <th>Ekipa</th>
-        <th>Število odigranih tekem</th>
-        <th>Zmage</th>
-        <th>Remijij</th>
-        <th>Porazi</th>
-        <th>Točke</th>
-    </thead>
-    %for (ekipa,tekme,zmage,remi,porazi,tocke) in lestvica:
-        <tr>
-            <td>{{ekipa}}</td>
-            <td>{{tekme}}</td>
-            <td>{{zmage}}</td>
-            <td>{{remi}}</td>
-            <td>{{porazi}}</td>
-            <td>{{tocke}}</td>
-        </tr>
-    %end
+    <table id="tabela" class="table table-striped" align="center">
+        <thead class="thead-dark">
+            <tr>
+                <th>Ekipa</th>
+                <th>Število odigranih tekem</th>
+                <th>Zmage</th>
+                <th>Remijij</th>
+                <th>Porazi</th>
+                <th>Točke</th>
+            </tr>
+        </thead>
+        <tbody>
+        %for (ekipa,tekme,zmage,remi,porazi,tocke) in lestvica:
+            <tr>
+                <td>{{ekipa}}</td>
+                <td>{{tekme}}</td>
+                <td>{{zmage}}</td>
+                <td>{{remi}}</td>
+                <td>{{porazi}}</td>
+                <td>{{tocke}}</td>
+            </tr>
+        %end
+        </tbody>
     </table>
-</div>
 
-<br>
-<form>
-    <input type="button" value="Nazaj" onclick="history.back()">
-</form>
+</div>

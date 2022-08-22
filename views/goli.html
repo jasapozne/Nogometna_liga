@@ -1,32 +1,56 @@
-%rebase('base.html', naslov='Seznam vseh zabeleženih zadetkov v ligi')
+%setdefault('napaka', '')
+%rebase('base.html', naslov='Seznam vseh zadetkov', napaka=napaka)
+<script>
+    $(document).ready(function() {
+      $('#tabela').DataTable( {
+          "language": {
+              "lengthMenu": "Prikaži _MENU_ vrstic na stran",
+              "zeroRecords": "Na voljo ni izbranih podatkov.",
+              "info": "Stran _PAGE_ od _PAGES_",
+              "infoEmpty": "Ni podatkov.",
+              "infoFiltered": "(filtered from _MAX_ total records)",
+              "paginate": {
+                "first": "Prva",
+                "last": "Zadnja",
+                "next": "Naslednja",
+                "previous": "Predhodna"
+              },
+              "search": "Iskalnik:",
+          },
+          "columnDefs": [{target: 0, visible: false, searchable: false}, {target: 1, visible: false, searchable: false}, {target: 2, visible: false, searchable: false}]
+        } );
+    } );
+  </script>
 
 <div class="jumbotron" align="center">
 
     <div class="input-group justify-content-center">
-        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Iskanje" title="Vnesi besedo">
-        <div class="input-group-append ">
-            <a class="btn btn-success" href="{{url('goli_dodaj')}}">Dodaj zadetek</a>
-        </div>
+        <a class="btn btn-success" href="{{url('goli_dodaj')}}">Dodaj zadetek</a>
     </div>
         
     
     
     <br>
-    <table class="table table-striped" id="myTable" align="center">
+    <table id="tabela" class="table table-striped" align="center">
         <thead class="thead-dark">
             <tr>
+                <th>id_tekme</th>
+                <th>strelec</th>
+                <th>podajalec</th>
                 <th>Domača ekipa</th>
                 <th>Gostujoča ekipa</th>
                 <th>Strelec</th>
                 <th>Podajalec</th>
                 <th>Ekipa</th>
+                <th>Uredi</th>
             </tr>
         </thead>
+        <tbody>
         %for (id_tekme, strelec, podajalec, domaca_ekipa,tuja_ekipa, ime_strelca,priimek_strelca, ime_podajalca, priimek_podajalca, ekipa) in goli:
             <tr>
-                <td style="display:none;">{{id_tekme}}</td>
-                <td style="display:none;">{{strelec}}</td>
-                <td style="display:none;">{{podajalec}}</td>
+                <td>{{id_tekme}}</td>
+                <td>{{strelec}}</td>
+                <td>{{podajalec}}</td>
                 <td>{{domaca_ekipa}}</td>
                 <td>{{tuja_ekipa}}</td>
                 <td>{{priimek_strelca}}</td>
@@ -44,5 +68,6 @@
                 </td>
             </tr>
         %end
+        </tbody>
     </table>
 </div>

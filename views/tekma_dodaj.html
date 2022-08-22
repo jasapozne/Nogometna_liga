@@ -1,0 +1,30 @@
+%rebase('base.html', naslov='Dodajanje tekme')
+
+<div class="jumbotron">
+    <div class="container">    
+        <form action="{{url('tekma_dodaj_post')}}", method="post">
+            <div class="form-group col-mb-3">
+                <label for="id_tekme">ID tekme</label>
+                <input id="id_tekme" name="id_tekme" type="number" class="form-control" placeholder="ID tekme" required="required">
+            </div>
+            <div class="form-group col-mb-3">
+                <label for="domaca_ekipa">Domača ekipa</label>
+                <input id="domaca_ekipa" name="domaca_ekipa" type="text" class="form-control" placeholder="Domača ekipa" required="required">
+            </div>
+            <div class="form-group col-mb-3">
+                <label for="tuja_ekipa">Tuja ekipa</label>
+                <input id="tuja_ekipa" name="tuja_ekipa" type="text" class="form-control" placeholder="Tuja ekipa" required="required">
+            </div>
+            <div class="form-group col-mb-3">
+                <label for="goli_domace">Goli domače ekipe</label>
+                <input id="goli_domace" name="goli_domace" type="number" class="form-control" placeholder="Goli domače ekipe" required="required">
+            </div>
+            <div class="form-group col-mb-3">
+                <label for="goli_tuje">Goli tuje ekipe</label>
+                <input id="goli_tuje" name="goli_tuje" type="number" class="form-control" placeholder="Goli tuje ekipe" required="required">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Dodaj tekmo</button>
+        </form>
+    </div>
+    </div>
