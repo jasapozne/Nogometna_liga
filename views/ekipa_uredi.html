@@ -1,0 +1,42 @@
+%rebase('base.html', naslov='Urejanje ekipe')
+
+<div class="jumbotron">
+    <div class="container">    
+        <form action="{{url('ekipa_uredi_post', ime=ekipa[0])}}", method="post">
+                <div class="form-group col-mb-3">
+                    <label for="novo_ime">Novo ime</label>
+                    <input id="novo_ime" name="novo_ime" type="text" class="form-control" placeholder="Novo ime", required="required">
+                </div>
+                <div class="form-group col-mb-3">
+                    <label for="mesto">Mesto</label>
+                    <input id="mesto" name="mesto" type="text" class="form-control" placeholder="Mesto", required="required">
+                </div>
+                <div class="form-group col-mb-3">
+                    <label for="stadion">Stadion</label>
+                    <input id="stadion" name="stadion" type="text" class="form-control" placeholder="Stadion", required="required">
+                </div>
+            <button type="submit" class="btn btn-primary">Uredi ekipo</button>
+        </form>
+    </div>
+    </div>
+
+<script>
+$(document).ready(function() {
+    $('#notEmptyForm').bootstrapValidator({
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            fullName: {
+                validators: {
+                    notEmpty: {
+                        message: 'The full name is required'
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
