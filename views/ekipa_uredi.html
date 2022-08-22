@@ -5,15 +5,15 @@
         <form action="{{url('ekipa_uredi_post', ime=ekipa[0])}}", method="post">
                 <div class="form-group col-mb-3">
                     <label for="novo_ime">Novo ime</label>
-                    <input id="novo_ime" name="novo_ime" type="text" class="form-control" placeholder="Novo ime" value="ekipa[0]" required="required">
+                    <input id="novo_ime" name="novo_ime" type="text" class="form-control" placeholder="Novo ime" value="{{ekipa[0]}}" required="required">
                 </div>
                 <div class="form-group col-mb-3">
                     <label for="mesto">Mesto</label>
-                    <input id="mesto" name="mesto" type="text" class="form-control" placeholder="Mesto" value="ekipa[1]" required="required">
+                    <input id="mesto" name="mesto" type="text" class="form-control" placeholder="Mesto" value="{{ekipa[1]}}" required="required">
                 </div>
                 <div class="form-group col-mb-3">
                     <label for="stadion">Stadion</label>
-                    <input id="stadion" name="stadion" type="text" class="form-control" placeholder="Stadion" value="ekipa[2]" required="required">
+                    <input id="stadion" name="stadion" type="text" class="form-control" placeholder="Stadion" value="{{ekipa[2]}}" required="required">
                 </div>
             <button type="submit" class="btn btn-primary">Uredi ekipo</button>
         </form>
