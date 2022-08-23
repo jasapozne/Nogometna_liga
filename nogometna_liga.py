@@ -1,7 +1,10 @@
 from bottleext import *
 import sqlite3
+import hashlib
 #import auth_public as auth
 import psycopg2, psycopg2.extensions, psycopg2.extras
+
+
 psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
 
 from auth import *
@@ -14,7 +17,68 @@ debug(True)
 
 
 
+skrivnost = "xn1AD5jy*RM*%qM$To0C8YlZ2uriO4"
 
+####UPORABNIKI
+def hashGesla(geslo):
+    f = hashlib.sha256()
+    f.update(geslo.encode("utf-8"))
+    return f.hexdigest()
+
+
+
+@get('/registracija')
+def registracija_get():
+    return template('registracija.html')
+
+@post('/registracija')
+def registracija_post():
+    emso = request.forms.emso
+    uporabnisko_ime = request.forms.uporabnisko_ime
+    geslo = request.forms.geslo
+    geslo2 = request.forms.geslo2
+    zgostitev = hashGesla(geslo)
+    cur.execute("""UPDATE oseba SET uporabnisko_ime = %s, geslo = %s WHERE emso = %s""", (uporabnisko_ime, zgostitev, emso))
+    response.set_cookie("uporabnisko_ime", uporabnisko_ime, secret=skrivnost)
+    redirect(url('index'))
+
+@get('/prijava')
+def prijava_get():
+    return template('prijava.html')
+
+@post('/prijava')
+def prijava_post():
+    uporabnisko_ime = request.forms.uporabnisko_ime
+    geslo = request.forms.geslo
+    hash_gesla = None
+    try:
+        cur.execute("""SELECT geslo FROM oseba WHERE uporabnisko_ime = %s""", (uporabnisko_ime, ))
+        hash_gesla = cur.fetchone()[0]
+    except:
+        hash_gesla = None
+    if hashGesla(geslo) != hash_gesla:
+        pass
+    response.set_cookie('uporabnisko_ime', uporabnisko_ime, secret=skrivnost)
+    redirect(url('index'))
+
+@get('/odjava')
+def odjava():
+    response.delete_cookie('uporabnisko_ime')
+    redirect(url('index'))
+
+def preveri_uporabnika():
+    uporabnisko_ime = request.get_cookie("uporabnisko_ime", secret=skrivnost)
+    if uporabnisko_ime:
+        uporabnik = None
+        try:
+            cur.execute(""" SELECT * FROM oseba WHERE uporabnisko_ime = %s""", (uporabnisko_ime, ))
+            uporabnik = cur.fetchone()[0]
+        except:
+            uporabnik = None
+        if uporabnik:
+            return uporabnik
+    redirect(url('registracija_get'))
+    
 
 
 
@@ -28,27 +92,6 @@ def nastaviSporocilo(sporocilo = None):
     return staro
 
 
-####UPORABNIKI
-@get('/registracija')
-def registracija_get():
-    return template('registracija.html')
-
-@get('/prijava')
-def prijava_get():
-    return template('prijava.html')
- 
-#@post("/prijava")
-#def prijava_post():
-#    emso = request.forms.get("emso")
-#    uporabnisko_ime = request.forms.get("uporabnisko_ime")
-#    geslo = request.forms.get("geslo")
-#    ponovno_geslo = request.froms.get("geslo2") 
-#    uporabnik = cur.execute("""SELECT * FROM oseba WHERE emso = ? """)
-
-     
-     
-
-
 @get('/')
 def index():
     return template('index.html') #index=cur
@@ -57,6 +100,9 @@ def index():
 
 @get('/ekipa')
 def ekipa():
+    uporabnik = preveri_uporabnika()
+    if uporabnik == None:
+        return
     cur.execute("""SELECT ime,stadion,mesto FROM ekipa""")
     return template('ekipa.html', ekipa=cur)
 
@@ -462,6 +508,12 @@ def lestvica():
 
     """)
     return template('lestvica.html', lestvica=cur)
+
+ 
+
+    
+ 
+  
 
 
 
