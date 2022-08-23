@@ -89,6 +89,7 @@ def ekipa_uredi_post(ime):
     mesto = request.forms.mesto
     stadion = request.forms.stadion
     cur.execute("""UPDATE ekipa SET ime = %s, mesto = %s, stadion = %s WHERE ime = %s;""", (ime, mesto, stadion, staro[0]))
+    conn.commit()
     redirect(url('ekipa'))
 
 
@@ -156,6 +157,7 @@ def goli_uredi_post(id_gol):
     strelec = request.forms.strelec
     podajalec = request.forms.podajalec
     cur.execute("""UPDATE goli SET id_tekme = %s, strelec = %s, podajalec = %s WHERE id_gol = %s;""", (id_tekme, strelec, podajalec, id_gol))
+    conn.commit()
     redirect(url('goli'))
 
 
@@ -221,6 +223,7 @@ def igralec_uredi_post(emso):
     konec_pogodbe = request.forms.konec_pogodbe
     novi_emso = request.forms.novi_emso
     cur.execute("""UPDATE igralec SET pozicija = %s, visina = %s, teza = %s, vrednost = %s, zacetek_pogodbe = %s, konec_pogodbe = %s, emso = %s WHERE emso = %s;""", (pozicija, visina, teza, vrednost, zacetek_pogodbe, konec_pogodbe, novi_emso, staro[6]))
+    conn.commit()
     redirect(url('igralec'))
 
 
@@ -279,6 +282,7 @@ def oseba_uredi_post(emso):
     rojstni_dan = request.forms.rojstni_dan
     ekipa = request.forms.ekipa
     cur.execute("""UPDATE oseba SET emso = %s, ime = %s, priimek = %s, rojstni_dan = %s, ekipa = %s WHERE emso = %s;""", (emso, ime, priimek, rojstni_dan, ekipa, staro[0]))
+    conn.commit()
     redirect(url('oseba'))
 
 
@@ -336,6 +340,7 @@ def tekma_uredi_post(id_tekme):
     goli_domace = request.forms.goli_domace
     goli_tuje = request.forms.goli_tuje
     cur.execute("""UPDATE tekma SET domaca_ekipa = %s, tuja_ekipa = %s, goli_domace = %s, goli_tuje = %s WHERE id_tekme = %s;""", (domaca_ekipa, tuja_ekipa, goli_domace, goli_tuje, staro[0]))
+    conn.commit()
     redirect(url('tekma'))
 
 
@@ -390,6 +395,7 @@ def zaposlen_uredi_post(emso):
     delovno_mesto = request.forms.delovno_mesto
     placa = request.forms.placa
     cur.execute("""UPDATE zaposlen SET emso = %s, delovno_mesto = %s, placa = %s WHERE emso = %s;""", (emso, delovno_mesto, placa, staro[0]))
+    conn.commit()
     redirect(url('zaposlen'))
 
 
