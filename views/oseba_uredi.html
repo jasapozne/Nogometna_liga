@@ -14,15 +14,21 @@
             </div>
             <div class="form-group">
                 <label for="ime">Ime:</label>
-                <input id="ime" name="ime" type="text" class="form-control" placeholder="Ime" value="{{oseba[1]}}" required>
+                <input id="ime" name="ime" type="text" class="form-control" placeholder="Ime" value="{{oseba[1]}}" required
+                oninput="this.setCustomValidity('')"
+                oninvalid="this.setCustomValidity('Polje je obvezno!')">
             </div>
             <div class="form-group">
                 <label for="priimek">Priimek:</label>
-                <input id="priimek" name="priimek" type="text" class="form-control" placeholder="Priimek" value="{{oseba[2]}}" required>
+                <input id="priimek" name="priimek" type="text" class="form-control" placeholder="Priimek" value="{{oseba[2]}}" required
+                oninput="this.setCustomValidity('')"
+                oninvalid="this.setCustomValidity('Polje je obvezno!')">
             </div>
             <div class="form-group">
                 <label for="rojstni_dan">Rojstni dan:</label>
-                <input id="rojstni_dan" name="rojstni_dan" type="text" class="form-control" placeholder="rojstni_dan" value="{{oseba[3]}}" required>
+                <input id="rojstni_dan" name="rojstni_dan" type="text" class="form-control" placeholder="rojstni_dan" value="{{oseba[3]}}" required
+                oninput="this.setCustomValidity('')"
+                oninvalid="this.setCustomValidity('Polje je obvezno!')">
             </div>
             <div class="form group">
                 <label for="ekipa">Ekipa:</label>

@@ -6,17 +6,23 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="ime">Ime:</label>
-                    <input id="ime" name="ime" type="text" class="form-control" placeholder="Ime" required>
+                    <input id="ime" name="ime" type="text" class="form-control" placeholder="Ime" required
+                    oninput="this.setCustomValidity('')"
+                    oninvalid="this.setCustomValidity('Polje je obvezno!')">
                 </div>
                 <div class="form-group col-md-6">
                     <label for="mesto">Mesto:</label>
-                    <input id="mesto" name="mesto" type="text" class="form-control" placeholder="Mesto" required>
+                    <input id="mesto" name="mesto" type="text" class="form-control" placeholder="Mesto" required
+                    oninput="this.setCustomValidity('')"
+                    oninvalid="this.setCustomValidity('Polje je obvezno!')">
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="stadion">Stadion:</label>
-                    <input id="stadion" name="stadion" type="text" class="form-control" placeholder="Stadion" required>
+                    <input id="stadion" name="stadion" type="text" class="form-control" placeholder="Stadion" required
+                    oninput="this.setCustomValidity('')"
+                    oninvalid="this.setCustomValidity('Polje je obvezno!')">
                 </div>
             </div>
             <button type="submit" class="btn btn-primary">Dodaj ekipo</button>

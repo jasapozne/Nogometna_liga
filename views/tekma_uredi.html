@@ -5,11 +5,15 @@
         <form action="{{url('tekma_uredi_post', id_tekme=tekma[0])}}", method="post">
             <div class="form-group col-mb-3">
                 <label for="goli_domace">Goli domače ekipe:</label>
-                <input id="goli_domace" name="goli_domace" type="number" class="form-control" placeholder="Goli domače ekipe" value="{{tekma[3]}}" required>
+                <input id="goli_domace" name="goli_domace" type="number" class="form-control" placeholder="Goli domače ekipe" value="{{tekma[3]}}" required
+                oninput="this.setCustomValidity('')"
+                oninvalid="this.setCustomValidity('Polje je obvezno!')">
             </div>
             <div class="form-group col-mb-3">
                 <label for="goli_tuje">Goli tuje ekipe:</label>
-                <input id="goli_tuje" name="goli_tuje" type="number" class="form-control" placeholder="Goli tuje ekipe" value="{{tekma[4]}}" required>
+                <input id="goli_tuje" name="goli_tuje" type="number" class="form-control" placeholder="Goli tuje ekipe" value="{{tekma[4]}}" required
+                oninput="this.setCustomValidity('')"
+                oninvalid="this.setCustomValidity('Polje je obvezno!')">
             </div>
             <div class="form group">
                 <label for="domaca_ekipa">Domača ekipa:</label>

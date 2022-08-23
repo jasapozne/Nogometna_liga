@@ -13,11 +13,15 @@
             </div>
             <div class="form-group col-mb-3">
                 <label for="delovno_mesto">Delovno mesto:</label>
-                <input id="delovno_mesto" name="delovno_mesto" type="text" class="form-control" placeholder="Delovno mesto" required>
+                <input id="delovno_mesto" name="delovno_mesto" type="text" class="form-control" placeholder="Delovno mesto" required
+                oninput="this.setCustomValidity('')"
+                oninvalid="this.setCustomValidity('Polje je obvezno!')">
             </div>
             <div class="form-group col-mb-3">
                 <label for="placa">Plača:</label>
-                <input id="placa" name="placa" type="text" class="form-control" placeholder="Plača" required>
+                <input id="placa" name="placa" type="text" class="form-control" placeholder="Plača" required
+                oninput="this.setCustomValidity('')"
+                oninvalid="this.setCustomValidity('Polje je obvezno!')">
             </div>
             <button type="submit" class="btn btn-primary">Dodaj zaposlenega</button>
         </form>

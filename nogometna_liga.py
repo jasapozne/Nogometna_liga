@@ -19,6 +19,13 @@ debug(True)
 
 skrivnost = "xn1AD5jy*RM*%qM$To0C8YlZ2uriO4"
 
+napakaSporocilo = None
+def nastaviSporocilo(sporocilo = None):
+    global napakaSporocilo
+    staro = napakaSporocilo
+    napakaSporocilo = sporocilo
+    return staro
+
 ####UPORABNIKI
 def hashGesla(geslo):
     f = hashlib.sha256()
@@ -37,6 +44,12 @@ def registracija_post():
     uporabnisko_ime = request.forms.uporabnisko_ime
     geslo = request.forms.geslo
     geslo2 = request.forms.geslo2
+    if len(geslo) < 6:
+        nastaviSporocilo("Geslo mora biti dolgo vsaj 6 znakov.")
+        redirect(url('registracija'))
+    if geslo != geslo2:
+        nastaviSporocilo("Gesli se ne ujemata")
+        redirect(url('registracija'))
     zgostitev = hashGesla(geslo)
     cur.execute("""UPDATE oseba SET uporabnisko_ime = %s, geslo = %s WHERE emso = %s""", (uporabnisko_ime, zgostitev, emso))
     conn.commit()
@@ -57,8 +70,12 @@ def prijava_post():
         hash_gesla = cur.fetchone()[0]
     except:
         hash_gesla = None
+    if hash_gesla == None:
+        nastaviSporocilo('Podatki za prijavo niso ustrezni.')
+        redirect('/prijava') 
     if hashGesla(geslo) != hash_gesla:
-        pass
+        nastaviSporocilo('Podatki za prijavo niso ustrezni.') 
+        redirect('/prijava')
     response.set_cookie('uporabnisko_ime', uporabnisko_ime, secret=skrivnost)
     redirect(url('index'))
 
@@ -85,12 +102,7 @@ def preveri_uporabnika():
 
 
 
-napakaSporocilo = None
-def nastaviSporocilo(sporocilo = None):
-    global napakaSporocilo
-    staro = napakaSporocilo
-    napakaSporocilo = sporocilo
-    return staro
+
 
 
 @get('/')

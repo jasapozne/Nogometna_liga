@@ -5,7 +5,9 @@
         <form action="{{url('goli_dodaj_post')}}", method="post">
             <div class="form-group">
                 <label for="id_gol">ID zadetka:</label>
-                <input id="id_gol" name="id_gol" type="number" class="form-control" placeholder="ID zadetka" required>
+                <input id="id_gol" name="id_gol" type="number" class="form-control" placeholder="ID zadetka" required
+                oninput="this.setCustomValidity('')"
+                oninvalid="this.setCustomValidity('Polje je obvezno!')">
             </div>
             <div class="form-group">
                 <label for="id_tekme">ID tekme:</label>
