@@ -39,6 +39,7 @@ def registracija_post():
     geslo2 = request.forms.geslo2
     zgostitev = hashGesla(geslo)
     cur.execute("""UPDATE oseba SET uporabnisko_ime = %s, geslo = %s WHERE emso = %s""", (uporabnisko_ime, zgostitev, emso))
+    conn.commit()
     response.set_cookie("uporabnisko_ime", uporabnisko_ime, secret=skrivnost)
     redirect(url('index'))
 
