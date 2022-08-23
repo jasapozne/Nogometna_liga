@@ -78,7 +78,7 @@ def preveri_uporabnika():
             uporabnik = None
         if uporabnik:
             return uporabnik
-    redirect(url('registracija_get'))
+    redirect(url('prijava_get'))
     
 
 
@@ -95,20 +95,20 @@ def nastaviSporocilo(sporocilo = None):
 
 @get('/')
 def index():
-    return template('index.html') #index=cur
+    return template('index.html') 
 
 ###EKIPE
 
 @get('/ekipa')
 def ekipa():
-    uporabnik = preveri_uporabnika()
-    if uporabnik == None:
-        return
     cur.execute("""SELECT ime,stadion,mesto FROM ekipa""")
     return template('ekipa.html', ekipa=cur)
 
 @get('/ekipa_dodaj')
 def ekipa_dodaj():
+    uporabnik = preveri_uporabnika()
+    if uporabnik == None:
+        return
     return template('ekipa_dodaj.html')
 
 @post('/ekipa_dodaj')
