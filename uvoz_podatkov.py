@@ -68,7 +68,7 @@ def uvozi_tekma():
 uvozi_tekma()
          
 def uvozi_goli():
-    data = pd.read_csv("podatki/csv/goli.csv")
+    data = pd.read_csv("podatki/csv/goli.csv", delimiter=";")
     f = open("podatki/sql/goli.sql", "w")
     for i in range(len(data.index)):
         stolpci = "(" + ", ".join(str(v) for v in list(data.columns)) + ")"

@@ -3,21 +3,32 @@
 <div class="jumbotron">
     <div class="container">    
         <form action="{{url('goli_dodaj_post')}}", method="post">
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="id_tekme">ID tekme</label>
-                    <input id="id_tekme" name="id_tekme" type="number" class="form-control" placeholder="ID tekme" required>
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="strelec">Strelec ID</label>
-                    <input id="strelec" name="strelec" type="number" class="form-control" placeholder="Strelec ID" required>
-                </div>
+            <div class="form-group">
+                <label for="id_gol">ID zadetka:</label>
+                <input id="id_gol" name="id_gol" type="number" class="form-control" placeholder="ID zadetka" required>
+            <div class="form-group">
+                <label for="id_tekme">ID tekme:</label>
+                <select name="id_tekme">
+                    %for id_tekme in tekme:
+                        <option value="{{id_tekme[0]}}">{{id_tekme[0]}}</option>
+                    %end
+                </select>
             </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="podajalec">Podajalec ID</label>
-                    <input id="podajalec" name="podajalec" type="number" class="form-control" placeholder="Podajalec ID" required>
-                </div>
+            <div class="form-group">
+                <label for="strelec">Strelec:</label>
+                <select name="strelec">
+                    %for (emso, ime, priimek) in igralci:
+                        <option value="{{emso}}">{{ime}} {{priimek}}</option>
+                    %end
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="podajalec">Podajalec:</label>
+                <select name="podajalec">
+                    %for (emso, ime, priimek) in igralci:
+                        <option value="{{emso}}">{{ime}} {{priimek}}</option>
+                    %end
+                </select>
             </div>
             <button type="submit" class="btn btn-primary">Dodaj zadetek</button>
         </form>

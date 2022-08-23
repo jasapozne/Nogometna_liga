@@ -17,7 +17,7 @@
               },
               "search": "Iskalnik:",
           },
-          "columnDefs": [{target: 0, visible: false, searchable: false}, {target: 1, visible: false, searchable: false}, {target: 2, visible: false, searchable: false}]
+          "columnDefs": [{target: 2, visible: false, searchable: false}, {target: 3, visible: false, searchable: false}]
         } );
     } );
   </script>
@@ -34,7 +34,8 @@
     <table id="tabela" class="table table-striped" align="center">
         <thead class="thead-dark">
             <tr>
-                <th>id_tekme</th>
+                <th>ID zadetka</th>
+                <th>ID tekme</th>
                 <th>strelec</th>
                 <th>podajalec</th>
                 <th>Domača ekipa</th>
@@ -46,22 +47,23 @@
             </tr>
         </thead>
         <tbody>
-        %for (id_tekme, strelec, podajalec, domaca_ekipa,tuja_ekipa, ime_strelca,priimek_strelca, ime_podajalca, priimek_podajalca, ekipa) in goli:
+        %for (id_gol, id_tekme, strelec, podajalec, domaca_ekipa, tuja_ekipa, ime_strelca, priimek_strelca, ime_podajalca, priimek_podajalca, ekipa) in goli:
             <tr>
+                <td>{{id_gol}}</td>
                 <td>{{id_tekme}}</td>
                 <td>{{strelec}}</td>
                 <td>{{podajalec}}</td>
                 <td>{{domaca_ekipa}}</td>
                 <td>{{tuja_ekipa}}</td>
-                <td>{{priimek_strelca}}</td>
-                <td>{{priimek_podajalca}}</td>
+                <td>{{ime_strelca}} {{priimek_strelca}}</td>
+                <td>{{ime_podajalca}} {{priimek_podajalca}}</td>
                 <td>{{ekipa}}</td>
                 <td>
                     <div class="btn-group " role="group">
-                        <form action="{{url('goli_uredi_get', id_tekme=id_tekme, strelec=strelec, podajalec=podajalec)}}" method="get">
+                        <form action="{{url('goli_uredi_get', id_gol=id_gol)}}" method="get">
                             <button type="submit" class="btn btn-primary">Uredi</button>
                         </form>
-                        <form action="{{url('goli_odstrani', id_tekme=id_tekme, strelec=strelec, podajalec=podajalec)}}" method="post">
+                        <form action="{{url('goli_odstrani', id_gol=id_gol)}}" method="post">
                             <button type="submit" class="btn btn-danger">Odstrani</button>
                         </form>
                     </div>

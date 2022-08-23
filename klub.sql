@@ -46,8 +46,8 @@ CREATE TABLE tekma (
 );
 
 CREATE TABLE goli (
-    gol_id INTEGER PRIMARY,
-    id_tekme INTEGER REFERENCES tekma(id_tekme),
+    id_gol INTEGER PRIMARY KEY,
+    id_tekme INTEGER NOT NULL REFERENCES tekma(id_tekme),
     strelec INTEGER NOT NULL REFERENCES oseba(emso), 
     podajalec INTEGER NOT NULL REFERENCES oseba(emso) 
 );

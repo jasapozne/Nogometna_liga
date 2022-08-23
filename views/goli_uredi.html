@@ -2,19 +2,34 @@
 
 <div class="jumbotron">
     <div class="container">    
-        <form action="{{url('goli_uredi_post', id_tekme=gol[0])}}", method="post">
-                <div class="form-group col-mb-3">
-                    <label for="nov_id">ID tekme</label>
-                    <input id="nov_id" name="nov_id" type="text" class="form-control" placeholder="Nov ID tekme" value="{{gol[0]}}" required="required">
-                </div>
-                <div class="form-group col-mb-3">
-                    <label for="strelec">Strelec ID</label>
-                    <input id="strelec" name="strelec" type="number" class="form-control" placeholder="Strelec ID" value="{{gol[1]}}" required="required">
-                </div>
-                <div class="form-group col-mb-3">
-                    <label for="podajalec">Podajalec ID</label>
-                    <input id="podajalec" name="podajalec" type="number" class="form-control" placeholder="Podajalec ID" value="{{gol[2]}}" required="required">
-                </div>
+        <form action="{{url('goli_uredi_post', id_gol=gol[0])}}", method="post">
+            <div class="form-group">
+                <label for="id_tekme">ID tekme</label>
+                <select name="id_tekme">
+                    <option selected="selected" value="{{gol[1]}}">{{gol[1]}}</option>
+                    %for id_tekme in tekme:
+                        <option value="{{id_tekme[0]}}">{{id_tekme[0]}}</option>
+                    %end
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="strelec">Strelec</label>
+                <select name="strelec">
+                    <option selected="selected" value="{{gol[2]}}">{{gol[6]}} {{gol[7]}}</option>
+                    %for (emso, ime, priimek) in igralci:
+                        <option value="{{emso}}">{{ime}} {{priimek}}</option>
+                    %end
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="podajalec">Podajalec</label>
+                <select name="podajalec">
+                    <option selected="selected" value="{{gol[3]}}">{{gol[8]}} {{gol[9]}}</option>
+                    %for (emso, ime, priimek) in igralci:
+                        <option value="{{emso}}">{{ime}} {{priimek}}</option>
+                    %end
+                </select>
+            </div>
             <button type="submit" class="btn btn-primary">Uredi zadetek</button>
         </form>
     </div>
