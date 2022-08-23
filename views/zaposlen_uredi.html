@@ -3,21 +3,12 @@
 <div class="jumbotron">
     <div class="container">    
         <form action="{{url('zaposlen_uredi_post', emso=zaposlen[0])}}", method="post">
-            <div class="form group">
-                <label for="nov_emso">EMŠO</label>
-                <select name="nov_emso">
-                    <option selected="selected" value="{{zaposlen[0]}}">{{zaposlen[0]}}</option>
-                    %for emso in emsoji:
-                        <option value="{{emso[0]}}">{{emso[0]}}</option>
-                    %end
-                </select>
-            </div>
-                <div class="form-group col-mb-3">
-                    <label for="delovno_mesto">Delovno mesto</label>
+                <div class="form-group">
+                    <label for="delovno_mesto">Delovno mesto:</label>
                     <input id="delovno_mesto" name="delovno_mesto" type="text" class="form-control" placeholder="Delovno mesto" value="{{zaposlen[1]}}" required>
                 </div>
-                <div class="form-group col-mb-3">
-                    <label for="placa">Plača</label>
+                <div class="form-group">
+                    <label for="placa">Plača:</label>
                     <input id="placa" name="placa" type="text" class="form-control" placeholder="Plača" value="{{zaposlen[2]}}" required>
                 </div>
             <button type="submit" class="btn btn-primary">Uredi zaposlenega</button>

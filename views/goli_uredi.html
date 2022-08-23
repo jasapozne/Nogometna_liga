@@ -4,7 +4,7 @@
     <div class="container">    
         <form action="{{url('goli_uredi_post', id_gol=gol[0])}}", method="post">
             <div class="form-group">
-                <label for="id_tekme">ID tekme</label>
+                <label for="id_tekme">ID tekme:</label>
                 <select name="id_tekme">
                     <option selected="selected" value="{{gol[1]}}">{{gol[1]}}</option>
                     %for id_tekme in tekme:
@@ -13,7 +13,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="strelec">Strelec</label>
+                <label for="strelec">Strelec:</label>
                 <select name="strelec">
                     <option selected="selected" value="{{gol[2]}}">{{gol[6]}} {{gol[7]}}</option>
                     %for (emso, ime, priimek) in igralci:
@@ -22,7 +22,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="podajalec">Podajalec</label>
+                <label for="podajalec">Podajalec:</label>
                 <select name="podajalec">
                     <option selected="selected" value="{{gol[3]}}">{{gol[8]}} {{gol[9]}}</option>
                     %for (emso, ime, priimek) in igralci:

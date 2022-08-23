@@ -4,7 +4,7 @@
     <div class="container">    
         <form action="{{url('oseba_uredi_post', emso=oseba[0])}}", method="post">
             <div class="form group">
-                <label for="nov_emso">EMŠO</label>
+                <label for="nov_emso">EMŠO:</label>
                 <select name="nov_emso">
                     <option selected="selected" value="{{oseba[0]}}">{{oseba[0]}}</option>
                     %for emso in emsoji:
@@ -13,19 +13,19 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="ime">Ime</label>
+                <label for="ime">Ime:</label>
                 <input id="ime" name="ime" type="text" class="form-control" placeholder="Ime" value="{{oseba[1]}}" required>
             </div>
             <div class="form-group">
-                <label for="priimek">Priimek</label>
+                <label for="priimek">Priimek:</label>
                 <input id="priimek" name="priimek" type="text" class="form-control" placeholder="Priimek" value="{{oseba[2]}}" required>
             </div>
             <div class="form-group">
-                <label for="rojstni_dan">Rojstni dan</label>
+                <label for="rojstni_dan">Rojstni dan:</label>
                 <input id="rojstni_dan" name="rojstni_dan" type="text" class="form-control" placeholder="rojstni_dan" value="{{oseba[3]}}" required>
             </div>
             <div class="form group">
-                <label for="ekipa">Ekipa</label>
+                <label for="ekipa">Ekipa:</label>
                 <select name="ekipa">
                     <option selected="selected" value="{{oseba[4]}}">{{oseba[4]}}</option>
                     %for ekipa in ekipe:

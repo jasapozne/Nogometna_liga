@@ -331,12 +331,11 @@ def tekma_uredi_get(id_tekme):
 def tekma_uredi_post(id_tekme):
     cur.execute(""" SELECT * FROM tekma WHERE id_tekme= %s""", (id_tekme, ))
     staro = cur.fetchone()
-    id_tekme = request.forms.nov_id_tekme
     domaca_ekipa = request.forms.domaca_ekipa
     tuja_ekipa = request.forms.tuja_ekipa
     goli_domace = request.forms.goli_domace
     goli_tuje = request.forms.goli_tuje
-    cur.execute("""UPDATE tekma SET id_tekme = %s, domaca_ekipa = %s, tuja_ekipa = %s, goli_domace = %s, goli_tuje = %s WHERE id_tekme = %s;""", (id_tekme, domaca_ekipa, tuja_ekipa, goli_domace, goli_tuje, staro[0]))
+    cur.execute("""UPDATE tekma SET domaca_ekipa = %s, tuja_ekipa = %s, goli_domace = %s, goli_tuje = %s WHERE id_tekme = %s;""", (domaca_ekipa, tuja_ekipa, goli_domace, goli_tuje, staro[0]))
     redirect(url('tekma'))
 
 

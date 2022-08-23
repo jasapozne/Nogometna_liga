@@ -4,7 +4,7 @@
     <div class="container">    
         <form action="{{url('zaposlen_dodaj_post')}}", method="post">
             <div class="form group">
-                <label for="emso">EMŠO</label>
+                <label for="emso">EMŠO:</label>
                 <select name="emso">
                     %for emso in emsoji:
                         <option value="{{emso[0]}}">{{emso[0]}}</option>
@@ -12,11 +12,11 @@
                 </select>
             </div>
             <div class="form-group col-mb-3">
-                <label for="delovno_mesto">Delovno mesto</label>
+                <label for="delovno_mesto">Delovno mesto:</label>
                 <input id="delovno_mesto" name="delovno_mesto" type="text" class="form-control" placeholder="Delovno mesto" required>
             </div>
             <div class="form-group col-mb-3">
-                <label for="placa">Plača</label>
+                <label for="placa">Plača:</label>
                 <input id="placa" name="placa" type="text" class="form-control" placeholder="Plača" required>
             </div>
             <button type="submit" class="btn btn-primary">Dodaj zaposlenega</button>
