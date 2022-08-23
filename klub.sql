@@ -17,8 +17,8 @@ CREATE TABLE oseba (
     priimek TEXT NOT NULL,
     rojstni_dan DATE NOT NULL DEFAULT now(),
     ekipa TEXT NOT NULL REFERENCES ekipa(ime) ON UPDATE CASCADE,
-    uporabnisko_ime TEXT UNIQUE,
-    geslo TEXT
+    uporabnisko_ime TEXT UNIQUE DEFAULT NULL,
+    geslo TEXT DEFAULT NULL
 );
 
 CREATE TABLE igralec (
@@ -46,6 +46,7 @@ CREATE TABLE tekma (
 );
 
 CREATE TABLE goli (
+    gol_id INTEGER PRIMARY,
     id_tekme INTEGER REFERENCES tekma(id_tekme),
     strelec INTEGER NOT NULL REFERENCES oseba(emso), 
     podajalec INTEGER NOT NULL REFERENCES oseba(emso) 

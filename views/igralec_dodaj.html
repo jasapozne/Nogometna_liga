@@ -2,37 +2,45 @@
 
 <div class="jumbotron">
     <div class="container">    
-        <form action="{{url('ekipa_dodaj_post')}}", method="post">
-            <div class="form-group col-mb-3">
+        <form action="{{url('igralec_dodaj_post')}}", method="post">
+            <div class="form group">
                 <label for="emso">EMŠO</label>
-                <input id="emso" name="emso" type="number" class="form-control" placeholder="EMŠO" required="required">
+                <select name="emso">
+                    %for (emso, ime, priimek, rojstni_dan, ekipa, uporabnisko_ime, geslo) in osebe:
+                        <option value="{{emso}}">{{emso}}</option>
+                    %end
+                </select>
             </div>
-            <div class="form-group col-mb-3">
+            <div class="form-group">
                 <label for="pozicija">Pozicija</label>
-                <input id="pozicija" name="pozicija" type="text" class="form-control" placeholder="Pozicija" required="required">
+                <select name="pozicija">
+                    %for pozicija in pozicije:
+                        <option value="{{pozicija[0]}}">{{pozicija[0]}}</option>
+                    %end
+                </select>
             </div>
-            <div class="form-group col-mb-3">
+            <div class="form-group">
                 <label for="visina">Višina</label>
-                <input id="visina" name="visina" type="text" class="form-control" placeholder="Višina" required="required">
+                <input id="visina" name="visina" type="text" class="form-control" placeholder="Višina" required>
             </div>
-            <div class="form-group col-mb-3">
+            <div class="form-group">
                 <label for="teža">Teža</label>
-                <input id="teza" name="teza" type="number" class="form-control" placeholder="Teža" required="required">
+                <input id="teza" name="teza" type="number" class="form-control" placeholder="Teža" required>
             </div>
-            <div class="form-group col-mb-3">
+            <div class="form-group">
                 <label for="vrednost">Vrednost</label>
-                <input id="vrednost" name="vrednost" type="text" class="form-control" placeholder="Vrednost" required="required">
+                <input id="vrednost" name="vrednost" type="text" class="form-control" placeholder="Vrednost" required>
             </div>
-            <div class="form-group col-mb-3">
+            <div class="form-group">
                 <label for="zacetek_pogodbe">Začetek pogodbe</label>
-                <input id="zacetek_pogodbe" name="zacetek_pogodbe" type="text" class="form-control" placeholder="Začetek pogodbe" required="required">
+                <input id="zacetek_pogodbe" name="zacetek_pogodbe" type="date" class="form-control" placeholder="Začetek pogodbe" required>
             </div>
-            <div class="form-group col-mb-3">
+            <div class="form-group">
                 <label for="konec_pogodbe">Konec pogodbe</label>
-                <input id="konec_pogodbe" name="konec_pogodbe" type="text" class="form-control" placeholder="Konec pogodbe" required="required">
+                <input id="konec_pogodbe" name="konec_pogodbe" type="date" class="form-control" placeholder="Konec pogodbe" required>
             </div>
 
-            <button type="submit" class="btn btn-primary">Dodaj ekipo</button>
+            <button type="submit" class="btn btn-primary">Dodaj igralca</button>
         </form>
     </div>
     </div>

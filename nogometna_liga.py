@@ -53,7 +53,7 @@ def index():
 
 @get('/ekipa')
 def ekipa():
-    cur.execute("""SELECT ime,stadion,mesto from ekipa""")
+    cur.execute("""SELECT ime,stadion,mesto FROM ekipa""")
     return template('ekipa.html', ekipa=cur)
 
 @get('/ekipa_dodaj')
@@ -71,9 +71,11 @@ def ekipa_dodaj_post():
 
 @get('/ekipa_uredi/<ime>')
 def ekipa_uredi_get(ime):
+    cur.execute("""SELECT * FROM ekipa """)
+    ekipe = cur.fetchall()
     cur.execute(""" SELECT * FROM ekipa WHERE ime= %s""", (ime, ))
     ekipa = cur.fetchone()
-    return template('ekipa_uredi.html', ekipa=ekipa)
+    return template('ekipa_uredi.html', ekipa=ekipa, ekipe=ekipe)
 
 @post('/ekipa_uredi/<ime>')
 def ekipa_uredi_post(ime):
@@ -158,7 +160,11 @@ def igralec():
 
 @get('/igralec_dodaj')
 def igralec_dodaj():
-    return template('igralec_dodaj.html')
+    cur.execute("""SELECT * FROM oseba""")
+    osebe = cur.fetchall()
+    cur.execute("""SELECT DISTINCT pozicija FROM igralec""")
+    pozicije = cur.fetchall()
+    return template('igralec_dodaj.html', osebe=osebe, pozicije=pozicije)
 
 @post('/igralec_dodaj')
 def igralec_dodaj_post():
@@ -169,7 +175,7 @@ def igralec_dodaj_post():
     vrednost = request.forms.vrednost
     zacetek_pogodbe = request.forms.zacetek_pogodbe
     konec_pogodbe = request.forms.konec_pogodbe
-    cur.execute("""INSERT INTO oseba (pozicija, visina, teza, vrednost, zacetek_pogodbe, konec_pogodbe, emso) VALUES (%s, %s, %s, %s, %s, %s, %s);""", (pozicija, visina, teza, vrednost, zacetek_pogodbe, konec_pogodbe, emso))
+    cur.execute("""INSERT INTO igralec (pozicija, visina, teza, vrednost, zacetek_pogodbe, konec_pogodbe, emso) VALUES (%s, %s, %s, %s, %s, %s, %s);""", (pozicija, visina, teza, vrednost, zacetek_pogodbe, konec_pogodbe, emso))
     conn.commit()
     redirect(url('igralec'))
 
@@ -177,7 +183,11 @@ def igralec_dodaj_post():
 def igralec_uredi_get(emso):
     cur.execute(""" SELECT * FROM igralec WHERE emso= %s""", (emso, ))
     igralec = cur.fetchone()
-    return template('igralec_uredi.html', igralec=igralec)
+    cur.execute(""" SELECT * FROM igralec""")
+    igralci= cur.fetchall()
+    cur.execute("""SELECT DISTINCT pozicija FROM igralec""")
+    pozicije = cur.fetchall()
+    return template('igralec_uredi.html', igralec=igralec, igralci=igralci, pozicije=pozicije)
 
 @post('/igralec_uredi/<emso>')
 def igralec_uredi_post(emso):
@@ -189,15 +199,15 @@ def igralec_uredi_post(emso):
     vrednost = request.forms.vrednost
     zacetek_pogodbe = request.forms.zacetek_pogodbe
     konec_pogodbe = request.forms.konec_pogodbe
-    novi_emso = request.forms.novo_ime
-    cur.execute("""UPDATE igralec SET pozicija = %s, visina = %s, teza = %s, vrednost = %s, zacetek_pogodbe = %s, konec_pogodbe = %s, emso = %s WHERE emso = %s;""", (pozicija, visina, teza, vrednost, zacetek_pogodbe, konec_pogodbe, staro[0]))
+    novi_emso = request.forms.novi_emso
+    cur.execute("""UPDATE igralec SET pozicija = %s, visina = %s, teza = %s, vrednost = %s, zacetek_pogodbe = %s, konec_pogodbe = %s, emso = %s WHERE emso = %s;""", (pozicija, visina, teza, vrednost, zacetek_pogodbe, konec_pogodbe, novi_emso, staro[6]))
     redirect(url('igralec'))
 
 
 @post('/igralec/odstrani/<emso>')
 def igralec_odstrani(emso): 
     try:
-        cur.execute("DELETE FROM igralec WHERE ime = %s", (emso, ))
+        cur.execute("DELETE FROM igralec WHERE emso = %s", (emso, ))
         conn.commit()
     except:
         conn.rollback()
@@ -214,7 +224,9 @@ def oseba():
 
 @get('/oseba_dodaj')
 def oseba_dodaj():
-    return template('oseba_dodaj.html')
+    cur.execute("""SELECT * from ekipa""")
+    ekipe = cur.fetchall()
+    return template('oseba_dodaj.html', ekipe=ekipe)
 
 @post('/oseba_dodaj')
 def oseba_dodaj_post():
@@ -231,7 +243,11 @@ def oseba_dodaj_post():
 def oseba_uredi_get(emso):
     cur.execute(""" SELECT * FROM oseba WHERE emso= %s""", (emso, ))
     oseba = cur.fetchone()
-    return template('oseba_uredi.html', oseba=oseba)
+    cur.execute(""" SELECT DISTINCT ime FROM ekipa""")
+    ekipe = cur.fetchall()
+    cur.execute(""" SELECT emso FROM oseba """)
+    emsoji = cur.fetchall()
+    return template('oseba_uredi.html', oseba=oseba, ekipe=ekipe, emsoji=emsoji)
 
 @post('/oseba_uredi/<emso>')
 def oseba_uredi_post(emso):
@@ -242,7 +258,7 @@ def oseba_uredi_post(emso):
     priimek = request.forms.priimek
     rojstni_dan = request.forms.rojstni_dan
     ekipa = request.forms.ekipa
-    cur.execute("""UPDATE oseba SET emso = %s, ime = %s, priimek = %s, rojstni_dan = %s, ekipa = %s WHERE ime = %s;""", (emso, ime, priimek, rojstni_dan, ekipa, staro[0]))
+    cur.execute("""UPDATE oseba SET emso = %s, ime = %s, priimek = %s, rojstni_dan = %s, ekipa = %s WHERE emso = %s;""", (emso, ime, priimek, rojstni_dan, ekipa, staro[0]))
     redirect(url('oseba'))
 
 
@@ -261,12 +277,14 @@ def oseba_odstrani(emso):
 ###TEKMA
 @get('/tekma')
 def tekma():
-    cur.execute("""SELECT id_tekme,domaca_ekipa,tuja_ekipa,goli_domace,goli_tuje from tekma""")
+    cur.execute("""SELECT id_tekme,domaca_ekipa,tuja_ekipa,goli_domace,goli_tuje FROM tekma""")
     return template('tekma.html', tekma=cur)
 
 @get('/tekma_dodaj')
 def tekma_dodaj():
-    return template('tekma_dodaj.html')
+    cur.execute("""SELECT ime FROM ekipa """)
+    ekipe = cur.fetchall()
+    return template('tekma_dodaj.html', ekipe=ekipe)
 
 @post('/tekma_dodaj')
 def tekma_dodaj_post():
@@ -275,7 +293,7 @@ def tekma_dodaj_post():
     tuja_ekipa = request.forms.tuja_ekipa
     goli_domace = request.forms.goli_domace
     goli_tuje = request.forms.goli_tuje
-    cur.execute("""INSERT INTO tekma (id_tekme, domaca_ekipa, tuja_ekipa, goli_domace, goli_tuje) VALUES (%s, %s, %s);""", (id_tekme, domaca_ekipa, tuja_ekipa, goli_domace, goli_tuje))
+    cur.execute("""INSERT INTO tekma (id_tekme, domaca_ekipa, tuja_ekipa, goli_domace, goli_tuje) VALUES (%s, %s, %s, %s, %s);""", (id_tekme, domaca_ekipa, tuja_ekipa, goli_domace, goli_tuje))
     conn.commit()
     redirect(url('tekma'))
 
@@ -283,7 +301,11 @@ def tekma_dodaj_post():
 def tekma_uredi_get(id_tekme):
     cur.execute(""" SELECT * FROM tekma WHERE id_tekme= %s""", (id_tekme, ))
     tekma = cur.fetchone()
-    return template('tekma_uredi.html', tekma=tekma)
+    cur.execute("""SELECT id_tekme FROM tekma""")
+    id_tekm = cur.fetchall()
+    cur.execute("""SELECT ime FROM ekipa """)
+    ekipe = cur.fetchall()
+    return template('tekma_uredi.html', tekma=tekma, id_tekm=id_tekm, ekipe=ekipe)
 
 @post('/tekma_uredi/<id_tekme>')
 def tekma_uredi_post(id_tekme):
@@ -294,7 +316,7 @@ def tekma_uredi_post(id_tekme):
     tuja_ekipa = request.forms.tuja_ekipa
     goli_domace = request.forms.goli_domace
     goli_tuje = request.forms.goli_tuje
-    cur.execute("""UPDATE tekma SET id_tekme = %s, domaca_ekipa = %s, tuja_ekipa = %s, goli_domace = %s, goli_tuje = %s WHERE emso = %s;""", (id_tekme, domaca_ekipa, tuja_ekipa, goli_domace, goli_tuje, staro[0]))
+    cur.execute("""UPDATE tekma SET id_tekme = %s, domaca_ekipa = %s, tuja_ekipa = %s, goli_domace = %s, goli_tuje = %s WHERE id_tekme = %s;""", (id_tekme, domaca_ekipa, tuja_ekipa, goli_domace, goli_tuje, staro[0]))
     redirect(url('tekma'))
 
 
@@ -320,7 +342,9 @@ def zaposlen():
 
 @get('/zaposlen_dodaj')
 def zaposlen_dodaj():
-    return template('zaposlen_dodaj.html')
+    cur.execute("""SELECT emso FROM oseba """)
+    emsoji = cur.fetchall()
+    return template('zaposlen_dodaj.html', emsoji=emsoji)
 
 @post('/zaposlen_dodaj')
 def zaposlen_dodaj_post():
@@ -335,7 +359,9 @@ def zaposlen_dodaj_post():
 def zaposlen_uredi_get(emso):
     cur.execute(""" SELECT * FROM zaposlen WHERE emso= %s""", (emso, ))
     zaposlen = cur.fetchone()
-    return template('zaposlen_uredi.html', zaposlen=zaposlen)
+    cur.execute("""SELECT emso FROM oseba """)
+    emsoji = cur.fetchall()
+    return template('zaposlen_uredi.html', zaposlen=zaposlen, emsoji=emsoji)
 
 @post('/zaposlen_uredi/<emso>')
 def zaposlen_uredi_post(emso):
@@ -344,7 +370,7 @@ def zaposlen_uredi_post(emso):
     emso = request.forms.nov_emso
     delovno_mesto = request.forms.delovno_mesto
     placa = request.forms.placa
-    cur.execute("""UPDATE igralec SET emso = %s, delovno_mesto = %s, placa = %s WHERE emso = %s;""", (emso, delovno_mesto, placa, staro[0]))
+    cur.execute("""UPDATE zaposlen SET emso = %s, delovno_mesto = %s, placa = %s WHERE emso = %s;""", (emso, delovno_mesto, placa, staro[0]))
     redirect(url('zaposlen'))
 
 

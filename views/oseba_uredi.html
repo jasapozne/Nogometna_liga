@@ -3,27 +3,37 @@
 <div class="jumbotron">
     <div class="container">    
         <form action="{{url('oseba_uredi_post', emso=oseba[0])}}", method="post">
-                <div class="form-group col-mb-3">
-                    <label for="nov_emso">EMŠO</label>
-                    <input id="nov_emso" name="nov_emso" type="number" class="form-control" placeholder="EMŠO" value="{{oseba[0]}}" required="required">
-                </div>
-                <div class="form-group col-mb-3">
-                    <label for="ime">Ime</label>
-                    <input id="ime" name="ime" type="text" class="form-control" placeholder="Ime" value="{{oseba[1]}}" required="required">
-                </div>
-                <div class="form-group col-mb-3">
-                    <label for="priimek">Priimek</label>
-                    <input id="priimek" name="priimek" type="text" class="form-control" placeholder="Priimek" value="{{oseba[2]}}" required="required">
-                </div>
-                <div class="form-group col-mb-3">
-                    <label for="rojstni_dan">Rojstni dan</label>
-                    <input id="rojstni_dan" name="rojstni_dan" type="text" class="form-control" placeholder="rojstni_dan" value="{{oseba[3]}}" required="required">
-                </div>
-                <div class="form-group col-mb-3">
-                    <label for="ekipa">Ekipa</label>
-                    <input id="ekipa" name="ekipa" type="text" class="form-control" placeholder="Ekipa" value="{{oseba[4]}}" required="required">
-                </div>
-            <button type="submit" class="btn btn-primary">Uredi ekipo</button>
+            <div class="form group">
+                <label for="nov_emso">EMŠO</label>
+                <select name="nov_emso">
+                    <option selected="selected" value="{{oseba[0]}}">{{oseba[0]}}</option>
+                    %for emso in emsoji:
+                        <option value="{{emso}}">{{emso}}</option>
+                    %end
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="ime">Ime</label>
+                <input id="ime" name="ime" type="text" class="form-control" placeholder="Ime" value="{{oseba[1]}}" required>
+            </div>
+            <div class="form-group">
+                <label for="priimek">Priimek</label>
+                <input id="priimek" name="priimek" type="text" class="form-control" placeholder="Priimek" value="{{oseba[2]}}" required>
+            </div>
+            <div class="form-group">
+                <label for="rojstni_dan">Rojstni dan</label>
+                <input id="rojstni_dan" name="rojstni_dan" type="text" class="form-control" placeholder="rojstni_dan" value="{{oseba[3]}}" required>
+            </div>
+            <div class="form group">
+                <label for="ekipa">Ekipa</label>
+                <select name="ekipa">
+                    <option selected="selected" value="{{oseba[4]}}">{{oseba[4]}}</option>
+                    %for ekipa in ekipe:
+                        <option value="{{ekipa[0]}}">{{ekipa[0]}}</option>
+                    %end
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Uredi osebo</button>
         </form>
     </div>
     </div>
