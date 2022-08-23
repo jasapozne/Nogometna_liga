@@ -1,4 +1,4 @@
-%rebase('base.html', naslov='Dodajanje ekipe')
+%rebase('base.html', naslov='Dodajanje igralca')
 
 <div class="jumbotron">
     <div class="container">    
@@ -6,8 +6,8 @@
             <div class="form group">
                 <label for="emso">EMŠO</label>
                 <select name="emso">
-                    %for (emso, ime, priimek, rojstni_dan, ekipa, uporabnisko_ime, geslo) in osebe:
-                        <option value="{{emso}}">{{emso}}</option>
+                    %for emso in osebe:
+                        <option value="{{emso[0]}}">{{emso[0]}}</option>
                     %end
                 </select>
             </div>

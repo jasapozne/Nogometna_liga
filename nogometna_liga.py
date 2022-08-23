@@ -160,7 +160,7 @@ def igralec():
 
 @get('/igralec_dodaj')
 def igralec_dodaj():
-    cur.execute("""SELECT * FROM oseba""")
+    cur.execute("""SELECT emso FROM oseba""")
     osebe = cur.fetchall()
     cur.execute("""SELECT DISTINCT pozicija FROM igralec""")
     pozicije = cur.fetchall()
