@@ -36,7 +36,8 @@ def hashGesla(geslo):
 
 @get('/registracija')
 def registracija_get():
-    return template('registracija.html')
+    napaka = nastaviSporocilo()
+    return template('registracija.html', napaka=napaka)
 
 @post('/registracija')
 def registracija_post():
@@ -44,12 +45,17 @@ def registracija_post():
     uporabnisko_ime = request.forms.uporabnisko_ime
     geslo = request.forms.geslo
     geslo2 = request.forms.geslo2
+    cur.execute("""SELECT * FROM oseba WHERE emso = %s""", (emso, ))
+    uporabnik = cur.fetchone()
+    if uporabnik == None:
+        nastaviSporocilo("Izbrani EMŠO ni v bazi.")
+        redirect(url('/registracija'))
     if len(geslo) < 6:
         nastaviSporocilo("Geslo mora biti dolgo vsaj 6 znakov.")
-        redirect(url('registracija'))
+        redirect(url('/registracija'))
     if geslo != geslo2:
         nastaviSporocilo("Gesli se ne ujemata")
-        redirect(url('registracija'))
+        redirect(url('/registracija'))
     zgostitev = hashGesla(geslo)
     cur.execute("""UPDATE oseba SET uporabnisko_ime = %s, geslo = %s WHERE emso = %s""", (uporabnisko_ime, zgostitev, emso))
     conn.commit()
@@ -58,7 +64,8 @@ def registracija_post():
 
 @get('/prijava')
 def prijava_get():
-    return template('prijava.html')
+    napaka = nastaviSporocilo()
+    return template('prijava.html', napaka=napaka)
 
 @post('/prijava')
 def prijava_post():
@@ -85,6 +92,8 @@ def odjava():
     redirect(url('index'))
 
 def preveri_uporabnika():
+    napaka = nastaviSporocilo()
+    nastaviSporocilo('Potrebna je prijava')
     uporabnisko_ime = request.get_cookie("uporabnisko_ime", secret=skrivnost)
     if uporabnisko_ime:
         uporabnik = None
@@ -95,7 +104,7 @@ def preveri_uporabnika():
             uporabnik = None
         if uporabnik:
             return uporabnik
-    redirect(url('prijava_get'))
+    redirect(url('prijava_get', napaka=napaka))
     
 
 
@@ -113,15 +122,18 @@ def index():
 
 @get('/ekipa')
 def ekipa():
+    napaka = nastaviSporocilo()
     cur.execute("""SELECT ime,stadion,mesto FROM ekipa""")
-    return template('ekipa.html', ekipa=cur)
+    return template('ekipa.html', ekipa=cur, napaka=napaka)
 
 @get('/ekipa_dodaj')
 def ekipa_dodaj():
+    napaka = nastaviSporocilo()
     uporabnik = preveri_uporabnika()
     if uporabnik == None:
         return
-    return template('ekipa_dodaj.html')
+    nastaviSporocilo('')
+    return template('ekipa_dodaj.html', napaka=napaka)
 
 @post('/ekipa_dodaj')
 def ekipa_dodaj_post():
@@ -134,11 +146,17 @@ def ekipa_dodaj_post():
 
 @get('/ekipa_uredi/<ime>')
 def ekipa_uredi_get(ime):
-    cur.execute("""SELECT * FROM ekipa """)
-    ekipe = cur.fetchall()
-    cur.execute(""" SELECT * FROM ekipa WHERE ime= %s""", (ime, ))
-    ekipa = cur.fetchone()
-    return template('ekipa_uredi.html', ekipa=ekipa, ekipe=ekipe)
+    napaka = nastaviSporocilo()
+    uporabnik = preveri_uporabnika()
+    if uporabnik == None:
+        return
+    else:
+        cur.execute("""SELECT * FROM ekipa """)
+        ekipe = cur.fetchall()
+        cur.execute(""" SELECT * FROM ekipa WHERE ime= %s""", (ime, ))
+        ekipa = cur.fetchone()
+        nastaviSporocilo('')
+        return template('ekipa_uredi.html', ekipa=ekipa, ekipe=ekipe, napaka=napaka)
 
 @post('/ekipa_uredi/<ime>')
 def ekipa_uredi_post(ime):
@@ -154,13 +172,18 @@ def ekipa_uredi_post(ime):
 
 @post('/ekipa/odstrani/<ime>')
 def ekipa_odstrani(ime): 
-    try:
-        cur.execute("DELETE FROM ekipa WHERE ime = %s", (ime, ))
-        conn.commit()
-    except:
-        conn.rollback()
-        nastaviSporocilo("Ekipe {} ni mogoče odstraniti, saj druge tabele vsebujejo sklice na to ekipo".format(ime))
-    redirect(url('ekipa'))
+    uporabnik = preveri_uporabnika()
+    nastaviSporocilo('')
+    if uporabnik == None:
+        redirect (url('ekipa'))
+    else:
+        try:
+            cur.execute("DELETE FROM ekipa WHERE ime = %s", (ime, ))
+            conn.commit()
+        except:
+            conn.rollback()
+            nastaviSporocilo("Ekipe {} ni mogoče odstraniti, saj druge tabele vsebujejo sklice na to ekipo".format(ime))
+        redirect(url('ekipa'))
 
 
 
@@ -168,22 +191,28 @@ def ekipa_odstrani(ime):
 ###GOLI
 @get('/goli')
 def goli():
+    napaka = nastaviSporocilo()
     cur.execute("""SELECT goli.id_gol, tekma.id_tekme, goli.strelec, goli.podajalec, tekma.domaca_ekipa, tekma.tuja_ekipa, oseba.ime, oseba.priimek, podaja.ime, podaja.priimek, oseba.ekipa FROM goli
                     JOIN oseba ON oseba.emso = goli.strelec
                     JOIN oseba AS podaja ON podaja.emso = goli.podajalec 
                     JOIN tekma ON tekma.id_tekme = goli.id_tekme
                     ORDER BY id_tekme DESC
                     """)
-    return template('goli.html', goli=cur)
+    return template('goli.html', goli=cur, napaka=napaka)
 
 @get('/goli_dodaj')
 def goli_dodaj():
+    napaka = nastaviSporocilo()
+    uporabnik = preveri_uporabnika()
+    if uporabnik == None:
+        return
+    nastaviSporocilo('')
     cur.execute("""SELECT id_tekme FROM tekma""")
     tekme = cur.fetchall()
     cur.execute("""SELECT igralec.emso, oseba.ime, oseba.priimek FROM igralec
                     JOIN oseba ON oseba.emso = igralec.emso""")
     igralci = cur.fetchall()
-    return template('goli_dodaj.html', tekme=tekme, igralci=igralci)
+    return template('goli_dodaj.html', tekme=tekme, igralci=igralci, napaka=napaka)
 
 @post('/goli_dodaj')
 def goli_dodaj_post():
@@ -191,12 +220,20 @@ def goli_dodaj_post():
     id_tekme = request.forms.id_tekme
     strelec = request.forms.strelec
     podajalec = request.forms.podajalec
+    if strelec == podajalec:
+        nastaviSporocilo("Podajalec in strelec morata biti različna.")
+        redirect(url('/goli_dodaj'))
     cur.execute("""INSERT INTO goli (id_gol, id_tekme, strelec, podajalec) VALUES (%s, %s, %s, %s);""", (id_gol, id_tekme, strelec, podajalec))
     conn.commit()
     redirect(url('goli'))
 
 @get('/goli_uredi/<id_gol>')
 def goli_uredi_get(id_gol):
+    napaka = nastaviSporocilo()
+    uporabnik = preveri_uporabnika()
+    if uporabnik == None:
+        return
+    nastaviSporocilo('')
     cur.execute("""SELECT goli.id_gol, tekma.id_tekme, goli.strelec, goli.podajalec, tekma.domaca_ekipa, tekma.tuja_ekipa, oseba.ime, oseba.priimek, podaja.ime, podaja.priimek, oseba.ekipa FROM goli
                     JOIN oseba ON oseba.emso = goli.strelec
                     JOIN oseba AS podaja ON podaja.emso = goli.podajalec 
@@ -208,7 +245,7 @@ def goli_uredi_get(id_gol):
     cur.execute("""SELECT igralec.emso, oseba.ime, oseba.priimek FROM igralec
                     JOIN oseba ON oseba.emso = igralec.emso""")
     igralci = cur.fetchall()   
-    return template('goli_uredi.html', gol=gol, tekme=tekme, igralci=igralci)
+    return template('goli_uredi.html', gol=gol, tekme=tekme, igralci=igralci, napaka=napaka)
 
 @post('/goli_uredi/<id_gol>')
 def goli_uredi_post(id_gol):
@@ -221,7 +258,11 @@ def goli_uredi_post(id_gol):
 
 
 @post('/goli/odstrani/<id_gol>')
-def goli_odstrani(id_gol): 
+def goli_odstrani(id_gol):
+    uporabnik = preveri_uporabnika()
+    nastaviSporocilo('')
+    if uporabnik == None:
+        redirect (url('goli')) 
     try:
         cur.execute("DELETE FROM goli WHERE id_gol = %s", (id_gol))
         conn.commit()
@@ -235,17 +276,23 @@ def goli_odstrani(id_gol):
 ###IGRALEC
 @get('/igralec')
 def igralec():
+    napaka = nastaviSporocilo()
     cur.execute("""SELECT oseba.emso, oseba.ime, oseba.priimek, pozicija,visina,teza,zacetek_pogodbe,konec_pogodbe,vrednost, oseba.ekipa from igralec
                     LEFT JOIN oseba ON oseba.emso = igralec.emso""")
-    return template('igralec.html', igralec=cur)
+    return template('igralec.html', igralec=cur, napaka=napaka)
 
 @get('/igralec_dodaj')
 def igralec_dodaj():
+    napaka = nastaviSporocilo()
+    uporabnik = preveri_uporabnika()
+    if uporabnik == None:
+        return
+    nastaviSporocilo('')
     cur.execute("""SELECT emso FROM oseba""")
     osebe = cur.fetchall()
     cur.execute("""SELECT DISTINCT pozicija FROM igralec""")
     pozicije = cur.fetchall()
-    return template('igralec_dodaj.html', osebe=osebe, pozicije=pozicije)
+    return template('igralec_dodaj.html', osebe=osebe, pozicije=pozicije, napaka=napaka)
 
 @post('/igralec_dodaj')
 def igralec_dodaj_post():
@@ -262,13 +309,18 @@ def igralec_dodaj_post():
 
 @get('/igralec_uredi/<emso>')
 def igralec_uredi_get(emso):
+    napaka = nastaviSporocilo()
+    uporabnik = preveri_uporabnika()
+    if uporabnik == None:
+        return
+    nastaviSporocilo('')
     cur.execute(""" SELECT * FROM igralec WHERE emso= %s""", (emso, ))
     igralec = cur.fetchone()
     cur.execute(""" SELECT * FROM igralec""")
     igralci= cur.fetchall()
     cur.execute("""SELECT DISTINCT pozicija FROM igralec""")
     pozicije = cur.fetchall()
-    return template('igralec_uredi.html', igralec=igralec, igralci=igralci, pozicije=pozicije)
+    return template('igralec_uredi.html', igralec=igralec, igralci=igralci, pozicije=pozicije, napaka=napaka)
 
 @post('/igralec_uredi/<emso>')
 def igralec_uredi_post(emso):
@@ -287,7 +339,11 @@ def igralec_uredi_post(emso):
 
 
 @post('/igralec/odstrani/<emso>')
-def igralec_odstrani(emso): 
+def igralec_odstrani(emso):
+    uporabnik = preveri_uporabnika()
+    nastaviSporocilo('')
+    if uporabnik == None:
+        redirect (url('igralec')) 
     try:
         cur.execute("DELETE FROM igralec WHERE emso = %s", (emso, ))
         conn.commit()
@@ -301,14 +357,20 @@ def igralec_odstrani(emso):
 ###OSEBA
 @get('/oseba')
 def oseba():
+    napaka = nastaviSporocilo()
     cur.execute("""SELECT emso, ime,priimek,rojstni_dan,ekipa from oseba""")
-    return template('oseba.html', oseba=cur)
+    return template('oseba.html', oseba=cur, napaka=napaka)
 
 @get('/oseba_dodaj')
 def oseba_dodaj():
+    napaka = nastaviSporocilo()
+    uporabnik = preveri_uporabnika()
+    if uporabnik == None:
+        return
+    nastaviSporocilo('')
     cur.execute("""SELECT * from ekipa""")
     ekipe = cur.fetchall()
-    return template('oseba_dodaj.html', ekipe=ekipe)
+    return template('oseba_dodaj.html', ekipe=ekipe, napaka=napaka)
 
 @post('/oseba_dodaj')
 def oseba_dodaj_post():
@@ -317,12 +379,20 @@ def oseba_dodaj_post():
     priimek = request.forms.priimek
     rojstni_dan = request.forms.rojstni_dan
     ekipa = request.forms.ekipa
-    cur.execute("""INSERT INTO oseba (emso, ime, priimek, rojstni_dan, ekipa) VALUES (%s, %s, %s, %s, %s);""", (emso, ime, priimek, rojstni_dan, ekipa))
-    conn.commit()
+    try:
+        cur.execute("""INSERT INTO oseba (emso, ime, priimek, rojstni_dan, ekipa) VALUES (%s, %s, %s, %s, %s);""", (emso, ime, priimek, rojstni_dan, ekipa))
+        conn.commit()
+    except:
+        conn.rollback()
+        nastaviSporocilo("Oseba z EMŠO {} je že dodana".format(emso))
     redirect(url('oseba'))
 
 @get('/oseba_uredi/<emso>')
 def oseba_uredi_get(emso):
+    uporabnik = preveri_uporabnika()
+    if uporabnik == None:
+        return
+    nastaviSporocilo('')
     cur.execute(""" SELECT * FROM oseba WHERE emso= %s""", (emso, ))
     oseba = cur.fetchone()
     cur.execute(""" SELECT DISTINCT ime FROM ekipa""")
@@ -346,7 +416,11 @@ def oseba_uredi_post(emso):
 
 
 @post('/oseba/odstrani/<emso>')
-def oseba_odstrani(emso): 
+def oseba_odstrani(emso):
+    uporabnik = preveri_uporabnika()
+    nastaviSporocilo('')
+    if uporabnik == None:
+        redirect (url('oseba')) 
     try:
         cur.execute("DELETE FROM oseba WHERE emso = %s", (emso, ))
         conn.commit()
@@ -360,14 +434,20 @@ def oseba_odstrani(emso):
 ###TEKMA
 @get('/tekma')
 def tekma():
+    napaka = nastaviSporocilo()
     cur.execute("""SELECT id_tekme,domaca_ekipa,tuja_ekipa,goli_domace,goli_tuje FROM tekma""")
-    return template('tekma.html', tekma=cur)
+    return template('tekma.html', tekma=cur, napaka=napaka)
 
 @get('/tekma_dodaj')
 def tekma_dodaj():
+    napaka = nastaviSporocilo()
+    uporabnik = preveri_uporabnika()
+    if uporabnik == None:
+        return
+    nastaviSporocilo('')
     cur.execute("""SELECT ime FROM ekipa """)
     ekipe = cur.fetchall()
-    return template('tekma_dodaj.html', ekipe=ekipe)
+    return template('tekma_dodaj.html', ekipe=ekipe, napaka=napaka)
 
 @post('/tekma_dodaj')
 def tekma_dodaj_post():
@@ -376,12 +456,19 @@ def tekma_dodaj_post():
     tuja_ekipa = request.forms.tuja_ekipa
     goli_domace = request.forms.goli_domace
     goli_tuje = request.forms.goli_tuje
+    if domaca_ekipa == tuja_ekipa:
+        nastaviSporocilo("Izberite dve različni ekipi.")
+        redirect(url('/tekma_dodaj'))
     cur.execute("""INSERT INTO tekma (id_tekme, domaca_ekipa, tuja_ekipa, goli_domace, goli_tuje) VALUES (%s, %s, %s, %s, %s);""", (id_tekme, domaca_ekipa, tuja_ekipa, goli_domace, goli_tuje))
     conn.commit()
     redirect(url('tekma'))
 
 @get('/tekma_uredi/<id_tekme>')
 def tekma_uredi_get(id_tekme):
+    uporabnik = preveri_uporabnika()
+    if uporabnik == None:
+        return
+    nastaviSporocilo('')
     cur.execute(""" SELECT * FROM tekma WHERE id_tekme= %s""", (id_tekme, ))
     tekma = cur.fetchone()
     cur.execute("""SELECT id_tekme FROM tekma""")
@@ -398,13 +485,21 @@ def tekma_uredi_post(id_tekme):
     tuja_ekipa = request.forms.tuja_ekipa
     goli_domace = request.forms.goli_domace
     goli_tuje = request.forms.goli_tuje
+    if domaca_ekipa == tuja_ekipa:
+        nastaviSporocilo("Izberite dve različni ekipi.")
+        redirect(url('/tekma'))
     cur.execute("""UPDATE tekma SET domaca_ekipa = %s, tuja_ekipa = %s, goli_domace = %s, goli_tuje = %s WHERE id_tekme = %s;""", (domaca_ekipa, tuja_ekipa, goli_domace, goli_tuje, staro[0]))
     conn.commit()
+    nastaviSporocilo('')
     redirect(url('tekma'))
 
 
 @post('/tekma/odstrani/<id_tekme>')
-def tekma_odstrani(id_tekme): 
+def tekma_odstrani(id_tekme):
+    uporabnik = preveri_uporabnika()
+    nastaviSporocilo('')
+    if uporabnik == None:
+        redirect (url('tekma'))
     try:
         cur.execute("DELETE FROM tekma WHERE id_tekme = %s", (id_tekme, ))
         conn.commit()
@@ -419,15 +514,21 @@ def tekma_odstrani(id_tekme):
 ###ZAPOSLEN
 @get('/zaposlen')
 def zaposlen():
+    napaka = nastaviSporocilo()
     cur.execute("""SELECT oseba.emso, oseba.ime, oseba.priimek,delovno_mesto,placa,oseba.ekipa from zaposlen
                     LEFT JOIN oseba ON oseba.emso = zaposlen.emso""")
-    return template('zaposlen.html', zaposlen=cur)
+    return template('zaposlen.html', zaposlen=cur, napaka=napaka)
 
 @get('/zaposlen_dodaj')
 def zaposlen_dodaj():
+    napaka = nastaviSporocilo()
+    uporabnik = preveri_uporabnika()
+    if uporabnik == None:
+        return
+    nastaviSporocilo('')
     cur.execute("""SELECT emso FROM oseba """)
     emsoji = cur.fetchall()
-    return template('zaposlen_dodaj.html', emsoji=emsoji)
+    return template('zaposlen_dodaj.html', emsoji=emsoji, napaka=napaka)
 
 @post('/zaposlen_dodaj')
 def zaposlen_dodaj_post():
@@ -440,26 +541,34 @@ def zaposlen_dodaj_post():
 
 @get('/zaposlen_uredi/<emso>')
 def zaposlen_uredi_get(emso):
+    napaka = nastaviSporocilo()
+    uporabnik = preveri_uporabnika()
+    if uporabnik == None:
+        return    
     cur.execute(""" SELECT * FROM zaposlen WHERE emso= %s""", (emso, ))
     zaposlen = cur.fetchone()
     cur.execute("""SELECT emso FROM oseba """)
     emsoji = cur.fetchall()
-    return template('zaposlen_uredi.html', zaposlen=zaposlen, emsoji=emsoji)
+    nastaviSporocilo('')
+    return template('zaposlen_uredi.html', zaposlen=zaposlen, emsoji=emsoji, napaka=napaka)
 
 @post('/zaposlen_uredi/<emso>')
 def zaposlen_uredi_post(emso):
     cur.execute(""" SELECT * FROM zaposlen WHERE emso= %s""", (emso, ))
     staro = cur.fetchone()
-    emso = request.forms.nov_emso
     delovno_mesto = request.forms.delovno_mesto
     placa = request.forms.placa
-    cur.execute("""UPDATE zaposlen SET emso = %s, delovno_mesto = %s, placa = %s WHERE emso = %s;""", (emso, delovno_mesto, placa, staro[0]))
+    cur.execute("""UPDATE zaposlen SET delovno_mesto = %s, placa = %s WHERE emso = %s;""", (delovno_mesto, placa, staro[0]))
     conn.commit()
     redirect(url('zaposlen'))
 
 
 @post('/zaposlen/odstrani/<emso>')
-def zaposlen_odstrani(emso): 
+def zaposlen_odstrani(emso):
+    uporabnik = preveri_uporabnika()
+    nastaviSporocilo('')
+    if uporabnik == None:
+        redirect (url('zaposlen')) 
     try:
         cur.execute("DELETE FROM zaposlen WHERE emso = %s", (emso, ))
         conn.commit()

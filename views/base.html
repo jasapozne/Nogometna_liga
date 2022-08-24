@@ -87,6 +87,11 @@
   </nav>
   <div class="jumbotron">
   <h2 align="center"><span class="badge badge-dark">{{naslov}}</span></h2>
+  % if napaka:
+  <div class="jumbotron" align="center" style="color:red" >
+      {{napaka}}
+  </div>
+  % end
   </div> 
   {{!base}}
 
