@@ -51,16 +51,16 @@ def registracija_post():
     unique_uporabnisko_ime = cur.fetchone()
     if uporabnik == None:
         nastaviSporocilo("Izbrani EMŠO ni v bazi.")
-        redirect(url('/registracija'))
+        redirect(url('registracija'))
     if unique_uporabnisko_ime != None:
         nastaviSporocilo("Izbrano uporabniško ime ni na voljo.")
-        redirect(url('/registracija'))
+        redirect(url('registracija'))
     if len(geslo) <= 6:
         nastaviSporocilo("Geslo mora biti dolgo vsaj 6 znakov.")
-        redirect(url('/registracija'))
+        redirect(url('registracija'))
     if geslo != geslo2:
         nastaviSporocilo("Gesli se ne ujemata.")
-        redirect(url('/registracija'))
+        redirect(url('registracija'))
     zgostitev = hashGesla(geslo)
     cur.execute("""UPDATE oseba SET uporabnisko_ime = %s, geslo = %s WHERE emso = %s""", (uporabnisko_ime, zgostitev, emso))
     conn.commit()
@@ -153,7 +153,7 @@ def ekipa_dodaj_post():
     unique_ime = cur.fetchone()
     if unique_ime != None:
         nastaviSporocilo("Ekipe {} ni mogoče dodati, saj je izbrano ime že v uporabi.".format(ime))
-        redirect(url('/ekipa_dodaj'))
+        redirect(url('ekipa_dodaj'))
     cur.execute("""INSERT INTO ekipa (ime, mesto, stadion) VALUES (%s, %s, %s);""", (ime, mesto, stadion))
     conn.commit()
     redirect(url('ekipa'))
@@ -236,10 +236,10 @@ def goli_dodaj_post():
     unique_id_gol = cur.fetchone()
     if unique_id_gol != None:
         nastaviSporocilo("Gola z ID-jem {} ni mogoče dodati, saj je izbrani ID že v bazi.".format(id_gol))
-        redirect(url('/gol_dodaj'))
+        redirect(url('goli_dodaj'))
     if strelec == podajalec:
         nastaviSporocilo("Podajalec in strelec morata biti različna.")
-        redirect(url('/goli_dodaj'))
+        redirect(url('goli_dodaj'))
     cur.execute("""INSERT INTO goli (id_gol, id_tekme, strelec, podajalec) VALUES (%s, %s, %s, %s);""", (id_gol, id_tekme, strelec, podajalec))
     conn.commit()
     redirect(url('goli'))
@@ -509,7 +509,7 @@ def tekma_uredi_post(id_tekme):
     goli_tuje = request.forms.goli_tuje
     if domaca_ekipa == tuja_ekipa:
         nastaviSporocilo("Izberite dve različni ekipi.")
-        redirect(url('/tekma'))
+        redirect(url('tekma'))
     cur.execute("""UPDATE tekma SET domaca_ekipa = %s, tuja_ekipa = %s, goli_domace = %s, goli_tuje = %s WHERE id_tekme = %s;""", (domaca_ekipa, tuja_ekipa, goli_domace, goli_tuje, staro[0]))
     conn.commit()
     nastaviSporocilo('')
