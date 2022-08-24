@@ -47,10 +47,15 @@ def registracija_post():
     geslo2 = request.forms.geslo2
     cur.execute("""SELECT * FROM oseba WHERE emso = %s""", (emso, ))
     uporabnik = cur.fetchone()
+    cur.execute("""SELECT * FROM OSEBA WHERE uporabnisko_ime = %s""", (uporabnisko_ime, ))
+    unique_uporabnisko_ime = cur.fetchone()
     if uporabnik == None:
         nastaviSporocilo("Izbrani EMŠO ni v bazi.")
         redirect(url('/registracija'))
-    if len(geslo) < 6:
+    if unique_uporabnisko_ime != None:
+        nastaviSporocilo("Izbrano uporabniško ime ni na voljo.")
+        redirect(url('/registracija'))
+    if len(geslo) <= 6:
         nastaviSporocilo("Geslo mora biti dolgo vsaj 6 znakov.")
         redirect(url('/registracija'))
     if geslo != geslo2:
