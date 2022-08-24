@@ -123,7 +123,7 @@ def preveri_uporabnika():
 
 
 
-@get('/')
+@get('/zacetna')
 def index():
     uspeh = nastaviSporocilo()
     return template('index.html', uspeh=uspeh) 
