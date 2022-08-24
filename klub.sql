@@ -22,7 +22,7 @@ CREATE TABLE ekipa (
 );
 
 CREATE TABLE oseba (
-    emso INTEGER PRIMARY KEY,
+    emso TEXT PRIMARY KEY,
     ime TEXT NOT NULL,
     priimek TEXT NOT NULL,
     rojstni_dan DATE NOT NULL DEFAULT now(),
