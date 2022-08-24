@@ -1,5 +1,4 @@
 from bottleext import *
-import sqlite3
 import hashlib
 #import auth_public as auth
 import psycopg2, psycopg2.extensions, psycopg2.extras
@@ -149,6 +148,11 @@ def ekipa_dodaj_post():
     ime = request.forms.ime
     mesto = request.forms.mesto
     stadion = request.forms.stadion
+    cur.execute(""" SELECT * FROM ekipa WHERE ime = %s """, (ime, ))
+    unique_ime = cur.fetchone()
+    if unique_ime != None:
+        nastaviSporocilo("Ekipe {} ni mogoče dodati, saj je izbrano ime že v uporabi.".format(ime))
+        redirect(url('/ekipa_dodaj'))
     cur.execute("""INSERT INTO ekipa (ime, mesto, stadion) VALUES (%s, %s, %s);""", (ime, mesto, stadion))
     conn.commit()
     redirect(url('ekipa'))
@@ -160,21 +164,19 @@ def ekipa_uredi_get(ime):
     if uporabnik == None:
         return
     else:
-        cur.execute("""SELECT * FROM ekipa """)
-        ekipe = cur.fetchall()
         cur.execute(""" SELECT * FROM ekipa WHERE ime= %s""", (ime, ))
         ekipa = cur.fetchone()
         nastaviSporocilo('')
-        return template('ekipa_uredi.html', ekipa=ekipa, ekipe=ekipe, napaka=napaka)
+        return template('ekipa_uredi.html', ekipa=ekipa, napaka=napaka)
 
 @post('/ekipa_uredi/<ime>')
 def ekipa_uredi_post(ime):
     cur.execute(""" SELECT * FROM ekipa WHERE ime= %s""", (ime, ))
     staro = cur.fetchone()
-    ime = request.forms.novo_ime
+    novo_ime = request.forms.novo_ime
     mesto = request.forms.mesto
     stadion = request.forms.stadion
-    cur.execute("""UPDATE ekipa SET ime = %s, mesto = %s, stadion = %s WHERE ime = %s;""", (ime, mesto, stadion, staro[0]))
+    cur.execute("""UPDATE ekipa SET ime = %s, mesto = %s, stadion = %s WHERE ime = %s;""", (novo_ime, mesto, stadion, staro[0]))
     conn.commit()
     redirect(url('ekipa'))
 
@@ -229,6 +231,11 @@ def goli_dodaj_post():
     id_tekme = request.forms.id_tekme
     strelec = request.forms.strelec
     podajalec = request.forms.podajalec
+    cur.execute(""" SELECT * FROM goli WHERE id_gol = %s """, (id_gol, ))
+    unique_id_gol = cur.fetchone()
+    if unique_id_gol != None:
+        nastaviSporocilo("Gola z ID-jem {} ni mogoče dodati, saj je izbrani ID že v bazi.".format(id_gol))
+        redirect(url('/gol_dodaj'))
     if strelec == podajalec:
         nastaviSporocilo("Podajalec in strelec morata biti različna.")
         redirect(url('/goli_dodaj'))
@@ -393,7 +400,7 @@ def oseba_dodaj_post():
         conn.commit()
     except:
         conn.rollback()
-        nastaviSporocilo("Oseba z EMŠO {} je že dodana.".format(emso))
+        nastaviSporocilo("Oseba z EMŠO {} je že bazi.".format(emso))
     redirect(url('oseba'))
 
 @get('/oseba_uredi/<emso>')
@@ -465,6 +472,11 @@ def tekma_dodaj_post():
     tuja_ekipa = request.forms.tuja_ekipa
     goli_domace = request.forms.goli_domace
     goli_tuje = request.forms.goli_tuje
+    cur.execute(""" SELECT * FROM tekma WHERE id_tekme = %s """, (id_tekme, ))
+    unique_id_tekme = cur.fetchone()
+    if unique_id_tekme != None:
+        nastaviSporocilo("Tekme z ID-jem {} ni mogoče dodati, saj je izbran ID že v bazi.".format(id_tekme))
+        redirect(url('/tekma_dodaj'))
     if domaca_ekipa == tuja_ekipa:
         nastaviSporocilo("Izberite dve različni ekipi.")
         redirect(url('/tekma_dodaj'))

@@ -1,4 +1,4 @@
-db = "sem2022_jasap"
+db = "sem2022_zigag"
 host = "baza.fmf.uni-lj.si"
 user = "javnost"
 password = "javnogeslo"
