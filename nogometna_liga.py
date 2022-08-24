@@ -60,6 +60,7 @@ def registracija_post():
     cur.execute("""UPDATE oseba SET uporabnisko_ime = %s, geslo = %s WHERE emso = %s""", (uporabnisko_ime, zgostitev, emso))
     conn.commit()
     response.set_cookie("uporabnisko_ime", uporabnisko_ime, secret=skrivnost)
+    nastaviSporocilo('Registracija je bila uspešna.')
     redirect(url('index'))
 
 @get('/prijava')
@@ -84,6 +85,7 @@ def prijava_post():
         nastaviSporocilo('Podatki za prijavo niso ustrezni.') 
         redirect('/prijava')
     response.set_cookie('uporabnisko_ime', uporabnisko_ime, secret=skrivnost)
+    nastaviSporocilo('Prijava je bila uspešna.')
     redirect(url('index'))
 
 @get('/odjava')
@@ -116,7 +118,8 @@ def preveri_uporabnika():
 
 @get('/')
 def index():
-    return template('index.html') 
+    uspeh = nastaviSporocilo()
+    return template('index.html', uspeh=uspeh) 
 
 ###EKIPE
 
