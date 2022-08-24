@@ -8,8 +8,10 @@ psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
 
 from auth import *
 
-# KONFIGURACIJA 
-baza_datoteka = "sem2022_jasap"
+# PRIVZETO
+SERVER_PORT = os.environ.get('BOTTLE_PORT', 8080)
+RELOADER = os.environ.get('BOTTLE_RELOADER', True)
+DB_PORT = os.environ.get('POSTGRES_PORT', 5432)
 
 # Odkomentiraj, če želiš sporočila o napakah
 debug(True)
@@ -663,10 +665,10 @@ def lestvica():
 
 
 psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
-conn = psycopg2.connect(database=db, host=host, user=user, password=password)
+conn = psycopg2.connect(database=db, host=host, user=user, password=password, port=DB_PORT)
 cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-run(host='localhost', port=8080, reloader=True)
+run(host='localhost', port=SERVER_PORT, reloader=RELOADER)
 
 
 
