@@ -10,7 +10,7 @@ psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
 from auth import *
 
 # KONFIGURACIJA 
-baza_datoteka = "sem2022_jasap"
+baza_datoteka = "sem2022_mykolash"
 
 # Odkomentiraj, če želiš sporočila o napakah
 debug(True)
@@ -59,7 +59,7 @@ def registracija_post():
         nastaviSporocilo("Geslo mora biti dolgo vsaj 6 znakov.")
         redirect(url('/registracija'))
     if geslo != geslo2:
-        nastaviSporocilo("Gesli se ne ujemata")
+        nastaviSporocilo("Gesli se ne ujemata.")
         redirect(url('/registracija'))
     zgostitev = hashGesla(geslo)
     cur.execute("""UPDATE oseba SET uporabnisko_ime = %s, geslo = %s WHERE emso = %s""", (uporabnisko_ime, zgostitev, emso))
@@ -96,11 +96,12 @@ def prijava_post():
 @get('/odjava')
 def odjava():
     response.delete_cookie('uporabnisko_ime')
+    nastaviSporocilo('Odjava je bila uspešna.')
     redirect(url('index'))
 
 def preveri_uporabnika():
     napaka = nastaviSporocilo()
-    nastaviSporocilo('Potrebna je prijava')
+    nastaviSporocilo('Potrebna je prijava.')
     uporabnisko_ime = request.get_cookie("uporabnisko_ime", secret=skrivnost)
     if uporabnisko_ime:
         uporabnik = None
@@ -392,7 +393,7 @@ def oseba_dodaj_post():
         conn.commit()
     except:
         conn.rollback()
-        nastaviSporocilo("Oseba z EMŠO {} je že dodana".format(emso))
+        nastaviSporocilo("Oseba z EMŠO {} je že dodana.".format(emso))
     redirect(url('oseba'))
 
 @get('/oseba_uredi/<emso>')
@@ -434,7 +435,7 @@ def oseba_odstrani(emso):
         conn.commit()
     except:
         conn.rollback()
-        nastaviSporocilo("Osebe {} ni mogoče odstraniti, saj druge tabele vsebujejo sklice na to osebo".format(emso))
+        nastaviSporocilo("Osebe {} ni mogoče odstraniti, saj druge tabele vsebujejo sklice na to osebo.".format(emso))
     redirect(url('oseba'))
 
 
@@ -513,7 +514,7 @@ def tekma_odstrani(id_tekme):
         conn.commit()
     except:
         conn.rollback()
-        nastaviSporocilo("Tekme {} ni mogoče odstraniti, saj druge tabele vsebujejo sklice na to tekmo".format(id_tekme))
+        nastaviSporocilo("Tekme {} ni mogoče odstraniti, saj druge tabele vsebujejo sklice na to tekmo.".format(id_tekme))
     redirect(url('tekma'))
 
 
@@ -582,7 +583,7 @@ def zaposlen_odstrani(emso):
         conn.commit()
     except:
         conn.rollback()
-        nastaviSporocilo("Zaposlenega {} ni mogoče odstraniti, saj druge tabele vsebujejo sklice na tega zaposlenega".format(emso))
+        nastaviSporocilo("Zaposlenega {} ni mogoče odstraniti, saj druge tabele vsebujejo sklice na tega zaposlenega.".format(emso))
     redirect(url('zaposlen'))
 
 
