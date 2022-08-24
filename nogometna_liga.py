@@ -1,8 +1,7 @@
 from bottleext import *
 import hashlib
-#import auth_public as auth
 import psycopg2, psycopg2.extensions, psycopg2.extras
-
+import os
 
 psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
 
