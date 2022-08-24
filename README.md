@@ -6,8 +6,7 @@ Za projekt pri predmetu OPB smo ustvarili spletno stran, ki omogoča vodenje nog
 ## Navodila za uporabo
 Za uporabo aplikacije zaženite datoteko **nogometna_liga.py**, oziroma s spodnjo povezavo.
 
-* [![Jupyter](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jasapozne/Nogometna_liga/main) Jupyter
-* [![bottle.py](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jasapozne/Nogometna_liga/main?urlpath=proxy/8080/) Aplikacija `bottle.py`
+* [![bottle.py](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jasapozne/Nogometna_liga/main?urlpath=proxy/8080/)
 
 ## ER diagram  
 ![ER diagram](nogometna_liga.png)
