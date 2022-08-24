@@ -85,10 +85,10 @@ def prijava_post():
         hash_gesla = None
     if hash_gesla == None:
         nastaviSporocilo('Podatki za prijavo niso ustrezni.')
-        redirect('/prijava') 
+        redirect(url('prijava')) 
     if hashGesla(geslo) != hash_gesla:
         nastaviSporocilo('Podatki za prijavo niso ustrezni.') 
-        redirect('/prijava')
+        redirect(url('prijava'))
     response.set_cookie('uporabnisko_ime', uporabnisko_ime, secret=skrivnost)
     nastaviSporocilo('Prijava je bila uspešna.')
     redirect(url('index'))
@@ -187,7 +187,7 @@ def ekipa_odstrani(ime):
     uporabnik = preveri_uporabnika()
     nastaviSporocilo('')
     if uporabnik == None:
-        redirect (url('ekipa'))
+        redirect(url('ekipa'))
     else:
         try:
             cur.execute("DELETE FROM ekipa WHERE ime = %s", (ime, ))
@@ -279,7 +279,7 @@ def goli_odstrani(id_gol):
     uporabnik = preveri_uporabnika()
     nastaviSporocilo('')
     if uporabnik == None:
-        redirect (url('goli')) 
+        redirect(url('goli')) 
     try:
         cur.execute("DELETE FROM goli WHERE id_gol = %s", (id_gol))
         conn.commit()
@@ -360,7 +360,7 @@ def igralec_odstrani(emso):
     uporabnik = preveri_uporabnika()
     nastaviSporocilo('')
     if uporabnik == None:
-        redirect (url('igralec')) 
+        redirect(url('igralec')) 
     try:
         cur.execute("DELETE FROM igralec WHERE emso = %s", (emso, ))
         conn.commit()
@@ -437,7 +437,7 @@ def oseba_odstrani(emso):
     uporabnik = preveri_uporabnika()
     nastaviSporocilo('')
     if uporabnik == None:
-        redirect (url('oseba')) 
+        redirect(url('oseba')) 
     try:
         cur.execute("DELETE FROM oseba WHERE emso = %s", (emso, ))
         conn.commit()
@@ -477,10 +477,10 @@ def tekma_dodaj_post():
     unique_id_tekme = cur.fetchone()
     if unique_id_tekme != None:
         nastaviSporocilo("Tekme z ID-jem {} ni mogoče dodati, saj je izbran ID že v bazi.".format(id_tekme))
-        redirect(url('/tekma_dodaj'))
+        redirect(url('tekma_dodaj'))
     if domaca_ekipa == tuja_ekipa:
         nastaviSporocilo("Izberite dve različni ekipi.")
-        redirect(url('/tekma_dodaj'))
+        redirect(url('tekma_dodaj'))
     cur.execute("""INSERT INTO tekma (id_tekme, domaca_ekipa, tuja_ekipa, goli_domace, goli_tuje) VALUES (%s, %s, %s, %s, %s);""", (id_tekme, domaca_ekipa, tuja_ekipa, goli_domace, goli_tuje))
     conn.commit()
     redirect(url('tekma'))
