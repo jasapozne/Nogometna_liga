@@ -10,7 +10,7 @@ psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
 from auth import *
 
 # KONFIGURACIJA 
-baza_datoteka = "sem2022_mykolash"
+baza_datoteka = "sem2022_jasap"
 
 # Odkomentiraj, če želiš sporočila o napakah
 debug(True)
