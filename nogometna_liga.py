@@ -622,34 +622,15 @@ def podajalci():
     return template('podajalci.html', podajalci=cur)
 
 @get('/lestvica')
-def lestvica():
-    
+def lestvica(): 
     cur.execute(""" 
-    DROP VIEW IF EXISTS domaca_lestvica;
-    DROP VIEW IF EXISTS gostujoca_lestvica;
-
-    CREATE VIEW domaca_lestvica AS
-    SELECT domaca_ekipa AS ekipa, sum(CASE WHEN goli_domace > goli_tuje THEN 1 ELSE 0 END)+ sum(CASE WHEN goli_domace = goli_tuje THEN 1 ELSE 0 END) + sum(CASE WHEN goli_domace < goli_tuje THEN 1 ELSE 0 END)
-    AS tekme,sum(CASE WHEN goli_domace > goli_tuje THEN 1 ELSE 0 END) AS zmage, sum(CASE WHEN goli_domace = goli_tuje THEN 1 ELSE 0 END) AS remi,
-    sum(CASE WHEN goli_domace < goli_tuje THEN 1 ELSE 0 END) AS porazi, sum(CASE WHEN goli_domace > goli_tuje THEN 3 ELSE 0 END)+sum(CASE WHEN goli_domace = goli_tuje THEN 1 ELSE 0 END) AS tocke 
-    FROM tekma
-    GROUP BY domaca_ekipa;
-                
-    CREATE VIEW gostujoca_lestvica AS
-    SELECT tuja_ekipa AS ekipa, sum(CASE WHEN goli_domace > goli_tuje THEN 1 ELSE 0 END)+ sum(CASE WHEN goli_domace = goli_tuje THEN 1 ELSE 0 END) + sum(CASE WHEN goli_domace < goli_tuje THEN 1 ELSE 0 END) AS tekme,
-    sum(CASE WHEN goli_domace < goli_tuje THEN 1 ELSE 0 END) AS zmage, sum(CASE WHEN goli_domace = goli_tuje THEN 1 ELSE 0 END) AS remi,
-    sum(CASE WHEN goli_domace > goli_tuje THEN 1 ELSE 0 END) AS porazi,
-    sum(CASE WHEN goli_domace < goli_tuje THEN 3 ELSE 0 END)+sum(CASE WHEN goli_domace = goli_tuje THEN 1 ELSE 0 END) AS tocke FROM tekma
-    GROUP BY tuja_ekipa;
-    
-   SELECT domaca_lestvica.ekipa,sum(domaca_lestvica.tekme)+sum(gostujoca_lestvica.tekme),
-   sum(domaca_lestvica.zmage)+sum(gostujoca_lestvica.zmage),sum(domaca_lestvica.remi)+sum(gostujoca_lestvica.remi),
-   sum(domaca_lestvica.porazi)+sum(gostujoca_lestvica.porazi),sum(domaca_lestvica.tocke) +sum(gostujoca_lestvica.tocke)
-   FROM domaca_lestvica
-   JOIN gostujoca_lestvica ON domaca_lestvica.ekipa = gostujoca_lestvica.ekipa
-   GROUP BY domaca_lestvica.ekipa,domaca_lestvica.tocke,gostujoca_lestvica.tocke
-   ORDER BY domaca_lestvica.tocke+gostujoca_lestvica.tocke  DESC;
-
+    SELECT domaca_lestvica.ekipa,sum(domaca_lestvica.tekme)+sum(gostujoca_lestvica.tekme),
+    sum(domaca_lestvica.zmage)+sum(gostujoca_lestvica.zmage),sum(domaca_lestvica.remi)+sum(gostujoca_lestvica.remi),
+    sum(domaca_lestvica.porazi)+sum(gostujoca_lestvica.porazi),sum(domaca_lestvica.tocke) +sum(gostujoca_lestvica.tocke)
+    FROM domaca_lestvica
+    JOIN gostujoca_lestvica ON domaca_lestvica.ekipa = gostujoca_lestvica.ekipa
+    GROUP BY domaca_lestvica.ekipa,domaca_lestvica.tocke,gostujoca_lestvica.tocke
+    ORDER BY domaca_lestvica.tocke+gostujoca_lestvica.tocke  DESC;
     """)
     return template('lestvica.html', lestvica=cur)
 

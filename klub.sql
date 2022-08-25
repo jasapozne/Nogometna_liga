@@ -58,9 +58,23 @@ CREATE TABLE tekma (
 CREATE TABLE goli (
     id_gol INTEGER PRIMARY KEY,
     id_tekme INTEGER NOT NULL REFERENCES tekma(id_tekme),
-    strelec INTEGER NOT NULL REFERENCES oseba(emso), 
-    podajalec INTEGER NOT NULL REFERENCES oseba(emso) 
+    strelec TEXT NOT NULL REFERENCES oseba(emso), 
+    podajalec TEXT NOT NULL REFERENCES oseba(emso) 
 );
+
+CREATE VIEW domaca_lestvica AS
+SELECT domaca_ekipa AS ekipa, sum(CASE WHEN goli_domace > goli_tuje THEN 1 ELSE 0 END)+ sum(CASE WHEN goli_domace = goli_tuje THEN 1 ELSE 0 END) + sum(CASE WHEN goli_domace < goli_tuje THEN 1 ELSE 0 END)
+AS tekme,sum(CASE WHEN goli_domace > goli_tuje THEN 1 ELSE 0 END) AS zmage, sum(CASE WHEN goli_domace = goli_tuje THEN 1 ELSE 0 END) AS remi,
+sum(CASE WHEN goli_domace < goli_tuje THEN 1 ELSE 0 END) AS porazi, sum(CASE WHEN goli_domace > goli_tuje THEN 3 ELSE 0 END)+sum(CASE WHEN goli_domace = goli_tuje THEN 1 ELSE 0 END) AS tocke 
+FROM tekma
+GROUP BY domaca_ekipa;
+            
+CREATE VIEW gostujoca_lestvica AS
+SELECT tuja_ekipa AS ekipa, sum(CASE WHEN goli_domace > goli_tuje THEN 1 ELSE 0 END)+ sum(CASE WHEN goli_domace = goli_tuje THEN 1 ELSE 0 END) + sum(CASE WHEN goli_domace < goli_tuje THEN 1 ELSE 0 END) AS tekme,
+sum(CASE WHEN goli_domace < goli_tuje THEN 1 ELSE 0 END) AS zmage, sum(CASE WHEN goli_domace = goli_tuje THEN 1 ELSE 0 END) AS remi,
+sum(CASE WHEN goli_domace > goli_tuje THEN 1 ELSE 0 END) AS porazi,
+sum(CASE WHEN goli_domace < goli_tuje THEN 3 ELSE 0 END)+sum(CASE WHEN goli_domace = goli_tuje THEN 1 ELSE 0 END) AS tocke FROM tekma
+GROUP BY tuja_ekipa;
 
 
 
