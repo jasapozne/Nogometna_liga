@@ -5,7 +5,7 @@ import os
 
 psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
 
-from auth import *
+from auth_public import *
 
 # PRIVZETO
 SERVER_PORT = os.environ.get('BOTTLE_PORT', 8080)

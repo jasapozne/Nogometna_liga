@@ -38,11 +38,11 @@ CREATE TABLE igralec (
     vrednost TEXT NOT NULL,
     zacetek_pogodbe DATE NOT NULL DEFAULT now(),
     konec_pogodbe DATE NOT NULL DEFAULT now(),
-    emso INTEGER NOT NULL REFERENCES oseba(emso) PRIMARY KEY
+    emso TEXT NOT NULL REFERENCES oseba(emso) PRIMARY KEY
 );
 
 CREATE TABLE zaposlen (
-    emso INTEGER NOT NULL REFERENCES oseba(emso),
+    emso TEXT NOT NULL REFERENCES oseba(emso) PRIMARY KEY,
     delovno_mesto TEXT NOT NULL,
     placa TEXT NOT NULL
 );
