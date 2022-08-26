@@ -5,12 +5,6 @@
     <div class="container">    
         <form action="{{url('tekma_dodaj_post')}}", method="post">
             <div class="form-group">
-                <label for="id_tekme">ID tekme:</label>
-                <input id="id_tekme" name="id_tekme" type="number" class="form-control" placeholder="ID tekme" required
-                oninput="this.setCustomValidity('')"
-                oninvalid="this.setCustomValidity('Polje je obvezno!')">
-            </div>
-            <div class="form-group">
                 <label for="goli_domace">Goli domače ekipe:</label>
                 <input id="goli_domace" name="goli_domace" type="number" class="form-control" placeholder="Goli domače ekipe" required
                 oninput="this.setCustomValidity('')"

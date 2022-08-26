@@ -60,8 +60,8 @@ def uvozi_tekma():
     data = pd.read_csv("podatki/csv/tekma.csv")
     f = open("podatki/sql/tekma.sql", "w")
     for i in range(len(data.index)):
-        stolpci = "(" + ", ".join(str(v) for v in list(data.columns)) + ")"
-        vrednosti = "(" + str(data.iloc[i, 0]) + ", '" + "', '".join(str(v) for v in data.iloc[i, 1:3].values.tolist()) + "', " + ", ".join(str(v) for v in data.iloc[i, 3:].values.tolist()) + ")"
+        stolpci = "(" + ", ".join(str(v) for v in list(data.columns)[1:]) + ")"
+        vrednosti = "('" + "', '".join(str(v) for v in data.iloc[i, 1:3].values.tolist()) + "', " + ", ".join(str(v) for v in data.iloc[i, 3:].values.tolist()) + ")"
         f.write("INSERT INTO {tabela} {stolpci} VALUES {vrednosti}; \n".format(tabela="tekma", stolpci=stolpci, vrednosti=vrednosti))
     f.close()
 
@@ -71,8 +71,8 @@ def uvozi_goli():
     data = pd.read_csv("podatki/csv/goli.csv", delimiter=";")
     f = open("podatki/sql/goli.sql", "w")
     for i in range(len(data.index)):
-        stolpci = "(" + ", ".join(str(v) for v in list(data.columns)) + ")"
-        vrednosti = "(" + ", ".join(str(v) for v in data.iloc[[i]].values.tolist()[0]) + ")"
+        stolpci = "(" + ", ".join(str(v) for v in list(data.columns)[1:]) + ")"
+        vrednosti = "(" + ", ".join(str(v) for v in data.iloc[[i], 1:].values.tolist()[0]) + ")"
         f.write("INSERT INTO {tabela} {stolpci} VALUES {vrednosti}; \n".format(tabela="goli", stolpci=stolpci, vrednosti=vrednosti))
     f.close()
 
