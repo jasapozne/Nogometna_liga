@@ -39,7 +39,7 @@ def uvozi_igralec():
     f = open("podatki/sql/igralec.sql", "w")
     for i in range(len(data.index)):
         stolpci = "(" + ", ".join(str(v) for v in list(data.columns)) + ")"
-        vrednosti = "('" + "', '".join(str(v) for v in data.iloc[i, 0:6].values.tolist()) + "', " + "{0}".format(data.iloc[i, 6]) + ")"
+        vrednosti = "('" + "', '".join(str(v) for v in data.iloc[i, 0:5].values.tolist()) + "', " + "{0}".format(data.iloc[i, 5]) + ", " +  "{0}".format(data.iloc[i, 6]) + ")"
         f.write("INSERT INTO {tabela} {stolpci} VALUES {vrednosti}; \n".format(tabela="igralec", stolpci=stolpci, vrednosti=vrednosti))
     f.close()
 
@@ -50,7 +50,7 @@ def uvozi_zaposlen():
     f = open("podatki/sql/zaposlen.sql", "w")
     for i in range(len(data.index)):
         stolpci = "(" + ", ".join(str(v) for v in list(data.columns)) + ")"
-        vrednosti = "('" + "', '".join(str(v) for v in data.iloc[i, 0:2].values.tolist()) + "', " + "{0}".format(data.iloc[i, 2]) + ")"
+        vrednosti = "('" + "', '".join(str(v) for v in data.iloc[i, 0:1].values.tolist()) + "', " + "{0}".format(data.iloc[i, 1]) + ", " + "{0}".format(data.iloc[i, 2]) + ")"
         f.write("INSERT INTO {tabela} {stolpci} VALUES {vrednosti}; \n".format(tabela="zaposlen", stolpci=stolpci, vrednosti=vrednosti))
     f.close()
 
