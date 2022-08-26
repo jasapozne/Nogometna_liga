@@ -17,7 +17,7 @@
                 <label for="strelec">Strelec:</label>
                 <select name="strelec">
                     <option selected="selected" value="{{gol[2]}}">{{gol[6]}} {{gol[7]}}</option>
-                    %for (emso, ime, priimek) in igralci:
+                    %for (emso, ime, priimek, ekipa) in igralci:
                         <option value="{{emso}}">{{ime}} {{priimek}}</option>
                     %end
                 </select>
@@ -26,7 +26,7 @@
                 <label for="podajalec">Podajalec:</label>
                 <select name="podajalec">
                     <option selected="selected" value="{{gol[3]}}">{{gol[8]}} {{gol[9]}}</option>
-                    %for (emso, ime, priimek) in igralci:
+                    %for (emso, ime, priimek, ekipa) in igralci:
                         <option value="{{emso}}">{{ime}} {{priimek}}</option>
                     %end
                 </select>
